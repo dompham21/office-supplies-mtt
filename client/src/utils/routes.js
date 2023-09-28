@@ -1,0 +1,28 @@
+export const ROUTES = {
+    DASHBOARD: "/",
+    PROFILES: "user/profile",
+    LOGIN: "/login",
+    ORDERS: "user/order",
+    PRODUCTS: "/products",
+    USERS: "/users",
+    SETTINGS: "/settings",
+    CATEGORIES: "/categories",
+    LOGOUT: "/login",
+    ADMIN_DASHBOARD: "/admin",
+    SHIPPER_DASHBOARD: "/admin/shipper",
+
+    ADMIN_PRODUCT: "/admin/product",
+    ADMIN_CUSTOMER: "/admin/customer",
+    ADMIN_STAFF: "/admin/staff",
+    ADMIN_CATEGORY: "/admin/category",
+    ADMIN_BRAND: "/admin/brand",
+    ADMIN_ORDER: "/admin/order",
+    ADMIN_POSTER: "/admin/poster",
+    ADMIN_IMPORT: "/admin/import",
+    ADMIN_EXPORT: "/admin/export",
+    ADMIN_PROMOTION: "/admin/promotion",
+    ADMIN_SHIPPING: "/admin/shipping",
+    ADMIN_SUPPLIER: "/admin/supplier",
+    ADMIN_INVENTORY: "/admin/inventory",
+  };
+  
