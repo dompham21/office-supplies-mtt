@@ -14,6 +14,6 @@ public interface PromotionDetailService {
     public PromotionDetail savePromotionDetail(PromotionDetail promotion);
     public void deletePromotionDetailByPromotionId(String promotionId);
     public PromotionDetail getPromotionDetailById(Promotion promotion, Product product);
-
+    public List<PromotionDetail> getPromotionDetailByPromotion(Promotion promotion);
 
 }

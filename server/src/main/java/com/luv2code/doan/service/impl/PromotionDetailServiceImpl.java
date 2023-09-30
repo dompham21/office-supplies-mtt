@@ -33,6 +33,11 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
     }
 
     @Override
+    public List<PromotionDetail> getPromotionDetailByPromotion(Promotion promotion) {
+        return promotionDetailRepository.getPromotionDetailByPromotion(promotion);
+    }
+
+    @Override
     public PromotionDetail savePromotionDetail(PromotionDetail promotion) {
         return promotionDetailRepository.save(promotion);
     }

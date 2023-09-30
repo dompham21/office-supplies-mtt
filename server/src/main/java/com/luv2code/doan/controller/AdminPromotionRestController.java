@@ -56,16 +56,30 @@ public class AdminPromotionRestController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Staff staff = staffService.getStaffByEmail(userPrincipal.getEmail());
-        Date startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(body.getStartDate());
-        Date endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(body.getEndDate());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date fromDate =null;
+        Date endDate = null;
+        try {
+            fromDate = setToMidnight(format.parse(body.getStartDate()));
 
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new NotFoundException("Lỗi định dạng datetime!");
+        }
+        try {
+            endDate = setToMidnight(format.parse(body.getFinishDate()));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new NotFoundException("Lỗi định dạng datetime!");
+        }
         if(promotionService.existsById(body.getId())) {
             throw new DuplicateException("This id is already being used");
         }
 
         Promotion promotion = new Promotion();
         promotion.setId(body.getId());
-        promotion.setStartAt(startDate);
+        promotion.setStartAt(endDate);
         promotion.setEndAt(endDate);
         promotion.setStaff(staff);
         promotion.setReason(body.getReason());
@@ -121,7 +135,7 @@ public class AdminPromotionRestController {
             throw new NotFoundException("Lỗi định dạng datetime!");
         }
         try {
-            endDate = setToMidnight(format.parse(body.getEndDate()));
+            endDate = setToMidnight(format.parse(body.getFinishDate()));
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -187,7 +201,7 @@ public class AdminPromotionRestController {
             @RequestParam(value = "pageSize", required = false) Optional<Integer> pPageSize,
             @RequestParam(value = "sortField", required = false) Optional<String> pSortField,
             @RequestParam(value = "sortDirection", required = false) Optional<String> pSortDir,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws ProductNotFoundException {
         int pageNo = 1;
         int pageSize = 10;
         String sortField = "id";
@@ -228,8 +242,9 @@ public class AdminPromotionRestController {
             List<PromotionDetailDto> listPromotionDetailDto = new ArrayList<>();
 
             List<PromotionDetail> listPromotionDetails = promotion.getPromotionDetails();
+
             for(PromotionDetail promotionDetail : listPromotionDetails) {
-                Product product = promotionDetail.getProduct();
+                Product product = productService.getProductById( promotionDetail.getProduct().getId());
                 List<String> listImages = productService.getListImagesStringByProduct(product.getId());
 
                 PromotionDetailDto promotionDetailDto = new PromotionDetailDto(promotionDetail,
@@ -256,14 +271,15 @@ public class AdminPromotionRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<PromotionResponse> getPromotionById(@PathVariable String id, HttpServletRequest request) throws PromotionNotFoundException {
+    public ResponseEntity<PromotionResponse> getPromotionById(@PathVariable String id, HttpServletRequest request) throws PromotionNotFoundException, ProductNotFoundException {
         Promotion promotion = promotionService.getPromotionById(id);
 
         PromotionDto promotionDto = new PromotionDto(promotion);
         List<PromotionDetailDto> listPromotionDetailDto = new ArrayList<>();
-        List<PromotionDetail> listPromotionDetails = promotion.getPromotionDetails();
+        List<PromotionDetail> listPromotionDetails = promotionDetailService.getPromotionDetailByPromotion(promotion);
+        System.out.println(listPromotionDetails.size());
         for(PromotionDetail promotionDetail : listPromotionDetails) {
-            Product product = promotionDetail.getProduct();
+            Product product = productService.getProductById( promotionDetail.getProduct().getId());
             List<String> listImages = productService.getListImagesStringByProduct(product.getId());
 
             PromotionDetailDto promotionDetailDto = new PromotionDetailDto(promotionDetail,

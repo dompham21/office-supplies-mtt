@@ -13,8 +13,8 @@ const ActionButtons = ({
   detailsUrl,
   handleDelete,
   handleApprove,
-  approveButton = true,
-  deleteButton = fasle,
+  approveButton = false,
+  deleteButton = false,
   viewButton = false,
   viewModal,
   handleOpenModal

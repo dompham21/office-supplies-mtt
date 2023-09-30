@@ -13,6 +13,7 @@ const SelectProductSearch =  React.forwardRef((props, ref) => {
         id,
         control,
         options,
+        optionsDisable,
         name,
         rules,
         value,
@@ -29,7 +30,7 @@ const SelectProductSearch =  React.forwardRef((props, ref) => {
     } = props;
     
 
-
+    console.log(optionsDisable)
   
     return (
         <div className={className}> 
@@ -61,7 +62,7 @@ const SelectProductSearch =  React.forwardRef((props, ref) => {
                 >
                     {
                         options?.map(item => (
-                            <Option key={item.id} value={item.id}>
+                            <Option key={item.id} value={item.id} disabled={optionsDisable.includes(item.id)}>
                                 <div>
                                     {item.name}
                                 </div>
