@@ -416,7 +416,7 @@ export default function CreateOrUpdatePromotionForm({ initialValues }) {
                  
                   <div
                     className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8"
-                    key={item.id}
+                    key={item.id }
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
                        <SelectProductSearch
