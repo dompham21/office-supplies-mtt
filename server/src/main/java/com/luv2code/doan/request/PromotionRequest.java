@@ -17,7 +17,7 @@ public class PromotionRequest {
     private String startDate;
 
     @NotBlank(message = "End Date must not be null!")
-    private String endDate;
+    private String finishDate;
 
     @NotNull(message = "Promotion detail must not be null")
     private List<PromotionDetailRequest> promotionDetails;

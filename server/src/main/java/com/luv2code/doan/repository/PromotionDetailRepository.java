@@ -23,4 +23,5 @@ public interface PromotionDetailRepository extends JpaRepository<PromotionDetail
 
     public PromotionDetail getPromotionDetailByProductAndAndPromotion(Product product, Promotion promotion);
 
+    public List<PromotionDetail> getPromotionDetailByPromotion(Promotion promotion);
 }

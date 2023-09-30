@@ -25,11 +25,11 @@ public class Promotion {
     private String id;
 
     @Column(name = "start_at", nullable = false)
-    @JsonFormat(pattern="dd/MM/yyyy'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date startAt;
 
     @Column(name = "end_at", nullable = false)
-    @JsonFormat(pattern="dd/MM/yyyy'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date endAt;
 
     @Nationalized

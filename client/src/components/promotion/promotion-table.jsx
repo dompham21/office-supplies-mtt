@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { formatIsoStringDate } from '@utils/format-date-iso';
 import { useDeletePromotionMutation } from '@data/promotion/use-delete-promotion.mutation';
 import { useApprovePromotionMutation } from '@data/promotion/use-approve-promotion.mutation';
+import formatDateDDMMYYYY from '@utils/format-date-dd-mm-yyyy';
 
 function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo, sortField, sortDirection, keyword }) {
     const router = useRouter();
@@ -29,209 +30,209 @@ function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo,
 
 
 
-    const handleDeletePromotion = (e, id) => {
-        e.preventDefault()
-        confirm({
-            title: 'Do you want to delete this poster?',
-            icon: <ExclamationCircleFilled />,
-            centered: true,
-            onOk() {
-              deletePromotion(
-                    {
-                      id: id
-                    },
-                    {
-                      onSuccess: ( value ) => {
-                          const response  = value.data
+    // const handleDeletePromotion = (e, id) => {
+    //     e.preventDefault()
+    //     confirm({
+    //         title: 'Do you want to delete this poster?',
+    //         icon: <ExclamationCircleFilled />,
+    //         centered: true,
+    //         onOk() {
+    //           deletePromotion(
+    //                 {
+    //                   id: id
+    //                 },
+    //                 {
+    //                   onSuccess: ( value ) => {
+    //                       const response  = value.data
             
-                          if (response) {
-                              const { result, code, status, msg } = response;
-                              if(result == 1) {
-                                toast.success('xoá promotion thành công!', {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: "light",
-                                });     
-                              }
-                              else if(result == 0) {
-                                toast.error(msg, {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: "light",
-                                });
-                              }
-                          } else {
-                            toast.error('Xoá promotion thất bại!', {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            });
-                          }
-                      },
-                      onError: (error) => {
-                        if(error?.response?.status == 400) {
-                          if(error?.response?.data?.msg) {
+    //                       if (response) {
+    //                           const { result, code, status, msg } = response;
+    //                           if(result == 1) {
+    //                             toast.success('xoá promotion thành công!', {
+    //                               position: "top-right",
+    //                               autoClose: 5000,
+    //                               hideProgressBar: false,
+    //                               closeOnClick: true,
+    //                               pauseOnHover: true,
+    //                               draggable: true,
+    //                               progress: undefined,
+    //                               theme: "light",
+    //                             });     
+    //                           }
+    //                           else if(result == 0) {
+    //                             toast.error(msg, {
+    //                               position: "top-right",
+    //                               autoClose: 5000,
+    //                               hideProgressBar: false,
+    //                               closeOnClick: true,
+    //                               pauseOnHover: true,
+    //                               draggable: true,
+    //                               progress: undefined,
+    //                               theme: "light",
+    //                             });
+    //                           }
+    //                       } else {
+    //                         toast.error('Xoá promotion thất bại!', {
+    //                           position: "top-right",
+    //                           autoClose: 5000,
+    //                           hideProgressBar: false,
+    //                           closeOnClick: true,
+    //                           pauseOnHover: true,
+    //                           draggable: true,
+    //                           progress: undefined,
+    //                           theme: "light",
+    //                         });
+    //                       }
+    //                   },
+    //                   onError: (error) => {
+    //                     if(error?.response?.status == 400) {
+    //                       if(error?.response?.data?.msg) {
       
-                            toast.error(error?.response?.data?.msg, {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            });
-                          }
-                        }
-                        else {
-                          toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                          });
-                        }
+    //                         toast.error(error?.response?.data?.msg, {
+    //                           position: "top-right",
+    //                           autoClose: 5000,
+    //                           hideProgressBar: false,
+    //                           closeOnClick: true,
+    //                           pauseOnHover: true,
+    //                           draggable: true,
+    //                           progress: undefined,
+    //                           theme: "light",
+    //                         });
+    //                       }
+    //                     }
+    //                     else {
+    //                       toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
+    //                         position: "top-right",
+    //                         autoClose: 5000,
+    //                         hideProgressBar: false,
+    //                         closeOnClick: true,
+    //                         pauseOnHover: true,
+    //                         draggable: true,
+    //                         progress: undefined,
+    //                         theme: "light",
+    //                       });
+    //                     }
                           
-                      },
+    //                   },
                       
-                      // Always refetch after error or success:
-                      onSettled: () => {
-                        queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.PROMOTIONS_ADMIN, {
-                            "pageSize": 10,
-                            "sortField": sortField,
-                            "sortDirection": sortDirection,
-                            "pageNo": Number(pageNo),
-                          }]});
-                      },
+    //                   // Always refetch after error or success:
+    //                   onSettled: () => {
+    //                     queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.PROMOTIONS_ADMIN, {
+    //                         "pageSize": 10,
+    //                         "sortField": sortField,
+    //                         "sortDirection": sortDirection,
+    //                         "pageNo": Number(pageNo),
+    //                       }]});
+    //                   },
                     
-                    }
-                )
-            }
-        });
-    }
+    //                 }
+    //             )
+    //         }
+    //     });
+    // }
 
   
 
-    const handleApprovePromotion = (e, id) => {
-        e.preventDefault()
-        confirm({
-            title: 'Do you want to approve this promotion?',
-            icon: <ExclamationCircleFilled />,
-            centered: true,
-            onOk() {
-              approvePromotion(
-                    {
-                      id: id
-                    },
-                    {
-                      onSuccess: ( value ) => {
-                          const response  = value.data
+    // const handleApprovePromotion = (e, id) => {
+    //     e.preventDefault()
+    //     confirm({
+    //         title: 'Do you want to approve this promotion?',
+    //         icon: <ExclamationCircleFilled />,
+    //         centered: true,
+    //         onOk() {
+    //           approvePromotion(
+    //                 {
+    //                   id: id
+    //                 },
+    //                 {
+    //                   onSuccess: ( value ) => {
+    //                       const response  = value.data
             
-                          if (response) {
-                              const { result, code, status, msg } = response;
-                              if(result == 1) {
-                                toast.success("Huỷ xoá promotion thành công!", {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: "light",
-                                });     
-                              }
-                              else if(result == 0) {
-                                toast.error(msg, {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: true,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: "light",
-                                });
-                              }
-                          } else {
-                            toast.error('Huỷ xoá promotion thất bại!', {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            });
-                          }
-                      },
-                      onError: (error) => {
-                        if(error?.response?.status == 400) {
-                          if(error?.response?.data?.msg) {
+    //                       if (response) {
+    //                           const { result, code, status, msg } = response;
+    //                           if(result == 1) {
+    //                             toast.success("Huỷ xoá promotion thành công!", {
+    //                               position: "top-right",
+    //                               autoClose: 5000,
+    //                               hideProgressBar: false,
+    //                               closeOnClick: true,
+    //                               pauseOnHover: true,
+    //                               draggable: true,
+    //                               progress: undefined,
+    //                               theme: "light",
+    //                             });     
+    //                           }
+    //                           else if(result == 0) {
+    //                             toast.error(msg, {
+    //                               position: "top-right",
+    //                               autoClose: 5000,
+    //                               hideProgressBar: false,
+    //                               closeOnClick: true,
+    //                               pauseOnHover: true,
+    //                               draggable: true,
+    //                               progress: undefined,
+    //                               theme: "light",
+    //                             });
+    //                           }
+    //                       } else {
+    //                         toast.error('Huỷ xoá promotion thất bại!', {
+    //                           position: "top-right",
+    //                           autoClose: 5000,
+    //                           hideProgressBar: false,
+    //                           closeOnClick: true,
+    //                           pauseOnHover: true,
+    //                           draggable: true,
+    //                           progress: undefined,
+    //                           theme: "light",
+    //                         });
+    //                       }
+    //                   },
+    //                   onError: (error) => {
+    //                     if(error?.response?.status == 400) {
+    //                       if(error?.response?.data?.msg) {
       
-                            toast.error(error?.response?.data?.msg, {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            });
-                          }
-                        }
-                        else {
-                          toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                          });
-                        }
+    //                         toast.error(error?.response?.data?.msg, {
+    //                           position: "top-right",
+    //                           autoClose: 5000,
+    //                           hideProgressBar: false,
+    //                           closeOnClick: true,
+    //                           pauseOnHover: true,
+    //                           draggable: true,
+    //                           progress: undefined,
+    //                           theme: "light",
+    //                         });
+    //                       }
+    //                     }
+    //                     else {
+    //                       toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
+    //                         position: "top-right",
+    //                         autoClose: 5000,
+    //                         hideProgressBar: false,
+    //                         closeOnClick: true,
+    //                         pauseOnHover: true,
+    //                         draggable: true,
+    //                         progress: undefined,
+    //                         theme: "light",
+    //                       });
+    //                     }
                           
-                      },
+    //                   },
                       
-                      // Always refetch after error or success:
-                      onSettled: () => {
-                        queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.PROMOTIONS_ADMIN, {
-                            "pageSize": 10,
-                            "sortField": sortField,
-                            "sortDirection": sortDirection,
-                            "pageNo": Number(pageNo),
-                          }]});
-                      },
+    //                   // Always refetch after error or success:
+    //                   onSettled: () => {
+    //                     queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.PROMOTIONS_ADMIN, {
+    //                         "pageSize": 10,
+    //                         "sortField": sortField,
+    //                         "sortDirection": sortDirection,
+    //                         "pageNo": Number(pageNo),
+    //                       }]});
+    //                   },
                     
-                    }
-                )
-            }
-        });
-    }
+    //                 }
+    //             )
+    //         }
+    //     });
+    // }
 
     let columns = [
         {
@@ -244,15 +245,30 @@ function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo,
         },
         {
           title: "Staff name",
-          dataIndex: "user",
-          key: "user",
+          dataIndex: "staff",
+          key: "staff",
           align: "left",
           width: 200,
           ellipsis: true,
-          render: (user) => (
+          render: (staff) => (
             <div>
               {
-               <span>{user?.name}</span>
+               <span>{staff}</span>
+              }
+            </div>
+          ),
+        },
+        {
+          title: "Reason",
+          dataIndex: "reason",
+          key: "reason",
+          align: "left",
+          width: 200,
+          ellipsis: true,
+          render: (staff) => (
+            <div>
+              {
+               <span>{staff}</span>
               }
             </div>
           ),
@@ -264,7 +280,7 @@ function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo,
           align: "left",
           width: 200,
           render:(startDate) => (
-            <div>{formatIsoStringDate(startDate)}</div>
+            <div>{formatDateDDMMYYYY(startDate)}</div>
           )
         },
         {
@@ -274,26 +290,8 @@ function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo,
           align: "left",
           width: 200,
           render:(finishDate) => (
-            <div>{formatIsoStringDate(finishDate)}</div>
+            <div>{formatDateDDMMYYYY(finishDate)}</div>
           )
-        },
-        
-        {
-            title: "Status",
-            dataIndex: "active",
-            key: "active",
-            align: "center",
-            width: 100,
-            render: (active) => (
-              <Badge
-                text={active ? "Publish" : "Banned"}
-                color={
-                  active
-                    ? "bg-[#009f7f]"
-                    : "bg-accent"
-                }
-              />
-            ),
         },
         {
             title: "Actions",
@@ -305,10 +303,6 @@ function PromotionTable({ promotions, onPagination, totalPage, pageSize, pageNo,
               <ActionButtons
                 id={record?.id}
                 editUrl={`${router.asPath}/${id}/edit`}
-                deleteButton={record.active ? true : false}
-                approveButton={record.active ? false : true}
-                handleDelete={handleDeletePromotion}
-                handleApprove={handleApprovePromotion}
               />
             ),
         },

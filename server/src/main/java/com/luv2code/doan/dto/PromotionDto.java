@@ -16,18 +16,24 @@ public class PromotionDto {
     private String id;
     private Date startDate;
     private Date finishDate;
-    private Boolean active;
+    private String reason;
+    private String staff;
 
     private List<PromotionDetailDto> promotionDetails = new ArrayList<>();
 
     public PromotionDto(Promotion promotion) {
         this.id = promotion.getId();
+        this.startDate = promotion.getStartAt();
+        this.finishDate = promotion.getEndAt();
+        this.reason = promotion.getReason();
+        this.staff = promotion.getStaff().getName();
     }
 
     public PromotionDto(Promotion promotion, List<PromotionDetailDto> promotionDetails) {
         this.id = promotion.getId();
-
-
+        this.startDate = promotion.getStartAt();
+        this.finishDate = promotion.getEndAt();
+        this.reason = promotion.getReason();
         this.promotionDetails = promotionDetails;
     }
 }
