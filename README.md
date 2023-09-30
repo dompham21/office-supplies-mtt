@@ -14,7 +14,7 @@ This is a website for managing office supplies shops and facilitating online sal
     .
     ├── bao_cao                 # Documentation
     ├── server                  # Source code backend (spring boot)
-    ├── frontend                # Source code frontend (nextjs)
+    ├── client                # Source code frontend (nextjs)
     └── README.md
     
 ## Stack Tech
