@@ -6,6 +6,7 @@ import org.hibernate.annotations.Nationalized;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -41,4 +42,7 @@ public class Supplier {
 
     @Column(name="is_active", nullable = false)
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "suppliers", fetch = FetchType.LAZY)
+    private Collection<Product> products;
 }

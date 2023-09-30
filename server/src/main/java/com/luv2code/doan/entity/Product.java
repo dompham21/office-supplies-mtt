@@ -47,6 +47,10 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category categories;
 
+    @ManyToOne
+    @JoinColumn(name = "supply_id")
+    private Supplier suppliers;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<Review> reviews;
 
