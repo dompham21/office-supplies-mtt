@@ -1,5 +1,6 @@
 package com.luv2code.doan.request;
 
+import com.luv2code.doan.utils.MessageErrorMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,18 +17,17 @@ import java.util.Date;
 @Getter
 @Setter
 public class ChangeInfoCustomerRequest {
-    @NotBlank(message = "Name must not be blank")
-    @Size(max = 50, message = "Name should be less than 50 characters")
+    @NotBlank(message = MessageErrorMap.NAME_NOT_BLANK)
+    @Size(max = 50, message = MessageErrorMap.NAME_MAX_LENGTH)
     private String name;
 
-    @NotBlank(message = "Gender must not be blank")
-    @Size(max = 3, message = "Gender should be less than 3 characters")
+    @NotBlank(message = MessageErrorMap.GENDER_NOT_BLANK)
+    @Size(max = 3, message = MessageErrorMap.GENDER_MAX_LENGTH)
     private String gender;
 
-    @NotBlank(message = "Birthday must not be null")
+    @NotBlank(message = MessageErrorMap.BIRTHDAY_NOT_NULL)
     private String birthday;
 
-    @NotBlank(message = "Address must not be null")
-    @Size(max = 100, message = "Address should be less than 100 characters")
+    @NotBlank(message = MessageErrorMap.ADDRESS_NOT_BLANK)
     private String address;
 }

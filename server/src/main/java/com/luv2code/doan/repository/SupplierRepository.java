@@ -20,4 +20,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, String> {
     @Query("SELECT s FROM Supplier s")
     public Page<Supplier> findAllAdmin(Pageable pageable);
 
+    @Query("SELECT s FROM Supplier s WHERE s.id = :id")
+    public Supplier findSupplierById(String id);
+
 }
