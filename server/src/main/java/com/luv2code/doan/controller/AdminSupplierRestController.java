@@ -142,7 +142,7 @@ public class AdminSupplierRestController {
             supplierDto.add(new SupplierDto(s));
         }
 
-        ListSupplierResponse result = new ListSupplierResponse(1, "Get list brands successfully!",
+        ListSupplierResponse result = new ListSupplierResponse(1, "Get list supplier successfully!",
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
                 supplierDto, totalPage, pageNo
         );
