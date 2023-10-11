@@ -8,6 +8,7 @@ import com.luv2code.doan.request.ChangeOrderStatusRequest;
 import com.luv2code.doan.request.ShipperRequest;
 import com.luv2code.doan.response.*;
 import com.luv2code.doan.service.*;
+import com.luv2code.doan.utils.MessageErrorMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,89 +48,6 @@ public class ShipperOrderRestController {
 
     @Autowired
     private StaffService staffService;
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    private ResponseEntity<?> changeOrderStatusShipper(@PathVariable("id") Integer id, @Valid @RequestBody ChangeOrderStatusRequest changeOrderStatusRequest, HttpServletRequest request) throws OrderNotFoundException, OrderStatusNotFoundException, OrderStatusNotValidException {
-
-
-        Order order = orderService.getOrderById(id); //return exception not found order
-
-        OrderStatus orderStatusChange = orderStatusService.getOrderStatusById(changeOrderStatusRequest.getStatusId()); // return exception not found order not found
-
-        switch (order.getStatus().getId()) {
-            case 1: { // Cho xac nhan co the change thanh => huy? hoac cho` lay hang
-                if(orderStatusChange.getId() == 2 || orderStatusChange.getId() == 5) {
-                    // thuc hien change
-                    orderService.changeOrderStatus(order, orderStatusChange.getId());
-                }
-                else {
-                    throw new OrderStatusNotValidException("Order status not valid!");
-                }
-                break;
-            }
-            case 2: { // cho lay hang
-                if(orderStatusChange.getId() == 3 || orderStatusChange.getId() == 5) {
-                    // thuc hien change
-                    orderService.changeOrderStatus(order, orderStatusChange.getId());
-                }
-                else {
-                    throw new OrderStatusNotValidException("Order status not valid!");
-                }
-                break;
-            }
-            case 3: { // dang giao
-                if(orderStatusChange.getId() == 4 || orderStatusChange.getId() == 5) {
-                    // thuc hien change
-                    orderService.changeOrderStatus(order, orderStatusChange.getId());
-                }
-                else {
-                    throw new OrderStatusNotValidException("Order status not valid!");
-                }
-                break;
-            }
-            case 6: { // yeu cau huy
-                if(orderStatusChange.getId() == 1 || orderStatusChange.getId() == 2 || orderStatusChange.getId() == 5) {
-                    // thuc hien change
-                    orderService.changeOrderStatus(order, orderStatusChange.getId());
-                }
-                else {
-                    throw new OrderStatusNotValidException("Order status not valid!");
-                }
-                break;
-            }
-            default:{
-                break;
-            }
-
-        }
-
-        double total = orderService.getTotalByOrder(order);
-        OrderDto orderDto = new OrderDto(order, total);
-        List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
-        List<OrderDetail> listOrderDetail = order.getOrderDetails();
-
-        for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product,
-                            promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId()))
-                    );
-            listOrderDetailDto.add(orderDetailDto);
-        }
-        orderDto.setOrderDetails(listOrderDetailDto);
-
-
-        OrderResponse result = new OrderResponse(1, "Change order status order successfully!",
-                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                orderDto
-        );
-        return new ResponseEntity(result, HttpStatus.OK);
-    }
-
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
@@ -195,7 +113,7 @@ public class ShipperOrderRestController {
 
             } catch (ParseException e) {
                 e.printStackTrace();
-                throw new NotFoundException("Lỗi định dạng datetime!");
+                throw new NotFoundException(MessageErrorMap.INVALID_FORMAT_DATETIME);
             }
         }
         if(pToDate.isPresent() && !pToDate.get().trim().isEmpty()) {
@@ -203,7 +121,7 @@ public class ShipperOrderRestController {
             try {
                 toDate = setToLastMinute(format.parse(pToDate.get()));
             } catch (ParseException e) {
-                throw new NotFoundException("Lỗi định dạng datetime!");
+                throw new NotFoundException(MessageErrorMap.INVALID_FORMAT_DATETIME);
             }
         }
 
@@ -290,29 +208,6 @@ public class ShipperOrderRestController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/cancel/{id}", method = RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<?> cancelOrderShipper( Authentication authentication, @PathVariable Integer id, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        Staff staff = staffService.getStaffByEmail(userPrincipal.getEmail());
-
-        Order order = orderService.getOrderById(id);
-
-        if(orderService.checkOrderDeliveryByShipper(staff.getId(), order.getId())) {
-            orderService.cancelOrder(order);
-        }
-        else {
-            throw new NotFoundException("Đơn hàng này không phải bạn giao nên không thể huỷ!");
-        }
-
-        orderService.saveOrder(order);
-
-        BaseResponse result = new BaseResponse(1, "Successfully!", request.getMethod(), new Date().getTime(),
-                HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/done/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> doneOrderShipper( Authentication authentication, @PathVariable Integer id, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
@@ -326,7 +221,7 @@ public class ShipperOrderRestController {
             order.setStatus(orderStatusService.getOrderStatusById(4));
         }
         else {
-            throw new NotFoundException("Đơn hàng này không phải bạn giao nên không thể hoàn tất!");
+            throw new NotFoundException(MessageErrorMap.HAS_NOT_PERMISSION_DONE_ORDER);
         }
 
         orderService.saveOrder(order);

@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 public class UserRequest {
     @NotBlank(message = "Name must not be blank")
-    @Size(max = 100, message = "Name should be less than 100 characters")
+    @Size(max = 50, message = "Name should be less than 100 characters")
     private String name;
 
     @NotBlank(message = "Phone must not be blank")
@@ -23,6 +23,7 @@ public class UserRequest {
     private String phone;
 
     @NotBlank(message = "Email must not be blank")
+    @Size(max = 64, message = "Name should be less than 100 characters")
     @Email(message = "Email must be a well-formed email address")
     private String email;
 

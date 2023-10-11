@@ -1,5 +1,6 @@
 package com.luv2code.doan.request;
 
+import com.luv2code.doan.utils.MessageErrorMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,21 +14,22 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class SignupRequestBody {
 
-    @NotBlank(message = "Name must not be blank")
-    @Size(max = 50, message = "Name should be less than 100 characters")
+    @NotBlank(message = MessageErrorMap.NAME_NOT_BLANK)
+    @Size(max = 50, message = MessageErrorMap.NAME_MAX_LENGTH)
     private String name;
 
-    @NotBlank(message = "Phone must not be blank")
-    @Size(max = 11, message = "Phone should be less than 11 characters")
+    @NotBlank(message = MessageErrorMap.PHONE_NOT_BLANK)
+    @Size(max = 11, message = MessageErrorMap.PHONE_MAX_LENGTH)
     private String phone;
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Email must be a well-formed email address")
+    @NotBlank(message = MessageErrorMap.EMAIL_NOT_BLANK)
+    @Size(max = 64, message =MessageErrorMap.EMAIL_MAX_LENGTH)
+    @Email(message = MessageErrorMap.EMAIL_INVALID_FORMAT)
     private String email;
 
-    @NotBlank(message = "Password must not be blank")
-    @Size(min = 3 , message = "Password should be greater than equal to 3 characters")
-    @Size(max = 50, message = "Password should be less than 100 characters")
+    @NotBlank(message = MessageErrorMap.PASSWORD_NOT_BLANK)
+    @Size(min = 3 , message = MessageErrorMap.PASSWORD_MIN_LENGTH)
+    @Size(max = 100, message = MessageErrorMap.PASSWORD_MAX_LENGTH)
     private String password;
 
 }
