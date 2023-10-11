@@ -1,13 +1,13 @@
 package com.luv2code.doan.controller;
 
-import com.luv2code.doan.dto.BrandDto;
+
 import com.luv2code.doan.dto.SupplierDto;
-import com.luv2code.doan.entity.Brand;
 import com.luv2code.doan.entity.Supplier;
-import com.luv2code.doan.exceptions.BrandNotFoundException;
 import com.luv2code.doan.exceptions.SupplierNotFoundException;
 import com.luv2code.doan.request.SupplierRequest;
-import com.luv2code.doan.response.*;
+import com.luv2code.doan.response.BaseResponse;
+import com.luv2code.doan.response.ListSupplierResponse;
+import com.luv2code.doan.response.SupplierResponse;
 import com.luv2code.doan.service.SupplierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,18 +133,18 @@ public class AdminSupplierRestController {
             keyword = pKeyword.get();
         }
         Page page = supplierService.getListSupplierAdmin(pageNo, pageSize, sortField, sortDirection, keyword);
-        java.util.List<Brand> brands = page.getContent();
+        List<Supplier> suppliers = page.getContent();
         int totalPage = page.getTotalPages();
 
 
-        List<BrandDto> listBrandsDto = new ArrayList<>();
-        for(Brand c : brands) {
-            listBrandsDto.add(new BrandDto(c));
+        List<SupplierDto> supplierDto = new ArrayList<>();
+        for(Supplier s : suppliers) {
+            supplierDto.add(new SupplierDto(s));
         }
 
-        ListBrandResponse result = new ListBrandResponse(1, "Get list brands successfully!",
+        ListSupplierResponse result = new ListSupplierResponse(1, "Get list brands successfully!",
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                listBrandsDto, totalPage, pageNo
+                supplierDto, totalPage, pageNo
         );
 
         return new ResponseEntity(result, HttpStatus.OK);

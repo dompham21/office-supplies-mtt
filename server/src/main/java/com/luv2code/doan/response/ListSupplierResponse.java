@@ -1,6 +1,5 @@
 package com.luv2code.doan.response;
 
-import com.luv2code.doan.dto.BrandDto;
 import com.luv2code.doan.dto.SupplierDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
