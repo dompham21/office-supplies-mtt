@@ -20,6 +20,7 @@ import formatDateDDMMYYYY from '@utils/format-date-dd-mm-yyyy';
 import { useProvincesDetailQuery } from '@data/address/use-province-detail.query';
 import { useDistrictsDetailQuery } from '@data/address/use-districts-detail.query';
 import { useWardsDetailQuery } from '@data/address/use-ward-detail.query';
+import { MESSAGE_ERROR_MAP } from '@utils/message-error-map';
 
 const defaultValues = {
     name: "",
@@ -35,23 +36,24 @@ const { Option } = Select;
 const profileFormSchema = yup.object().shape({
     name: yup
       .string()
-      .required("Vui lòng nhập tên!"),
+      .required(MESSAGE_ERROR_MAP.NAME_NOT_BLANK)
+      .max(50, MESSAGE_ERROR_MAP.NAME_MAX_LENGTH),
     specificAddress: yup
       .string()
       .trim()
-      .required("Vui lòng điền số nhà, tên đường!")
-      .max(50, "Số nhà, tên đường tối đa 50 ký tự!"),
+      .required(MESSAGE_ERROR_MAP.SPECIFIC_ADDRESS_NOT_BLANK)
+      .max(50, MESSAGE_ERROR_MAP.SPECIFIC_ADDRESS_MAX_LENGTH),
     district: yup
       .string()
-      .required("Vui lòng chọn quận/huyện!"),
+      .required(MESSAGE_ERROR_MAP.DISTRICT_NOT_NULL),
     province: yup
       .string()
-      .required("Vui lòng chọn tỉnh/thành phố!"), 
+      .required(MESSAGE_ERROR_MAP.PROVINCE_NOT_NULL), 
     ward: yup
       .string()
-      .required("Vui lòng chọn phường/xã!"), 
-    gender: yup.string().required("Vui lòng nhập giới tính"),
-    birthday: yup.string().required("Vui lòng nhập ngày sinh"),
+      .required(MESSAGE_ERROR_MAP.WARD_NOT_NULL), 
+    gender: yup.string().required(MESSAGE_ERROR_MAP.GENDER_NOT_BLANK).max(3, MESSAGE_ERROR_MAP.GENDER_MAX_LENGTH),
+    birthday: yup.string().required(MESSAGE_ERROR_MAP.BIRTHDAY_NOT_NULL),
 });
 
 function SelectProvinces({
