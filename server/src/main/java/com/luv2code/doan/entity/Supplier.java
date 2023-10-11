@@ -19,11 +19,9 @@ public class Supplier {
     @Column(name="id", length = 10)
     private String id;
 
-    @Nationalized
     @Column(name="name", unique = true, length = 50)
     private String name;
 
-    @Nationalized
     @Column(name="website", length = 100)
     private String website;
 
@@ -33,7 +31,6 @@ public class Supplier {
     @Column(name="phone", length = 11, nullable = false)
     private String phone;
 
-    @Nationalized
     @Column(name="address", length = 100, nullable = false)
     private String address;
 
