@@ -9,8 +9,16 @@ const WARD_NOT_NULL = "Vui lòng chọn phường/xã!";
 const DISTRICT_NOT_NULL = "Vui lòng chọn quận/huyện!";
 const PROVINCE_NOT_NULL = "Vui lòng chọn tỉnh/thành phố!";
 
+const PHONE_NOT_BLANK = "Vui lòng nhập số điện thoại!";
+const PHONE_MAX_LENGTH = "Số điện thoại không quá 11 kí số!";
+const EMAIL_NOT_BLANK = "Vui lòng nhập Email!";
+const EMAIL_INVALID_FORMAT = "Email chưa đúng định dạng!";
+const EMAIL_MAX_LENGTH = "Email không quá 64 kí tự!";
+const PASSWORD_NOT_BLANK = "Vui lòng nhập password!";
+const PASSWORD_MAX_LENGTH = "Email không quá 100 kí tự!";
+const PASSWORD_MIN_LENGTH = "Email không nhỏ 3 kí tự!";
 export const MESSAGE_ERROR_MAP = {
-    NAME_NOT_BLANK, 
+    NAME_NOT_BLANK,
     NAME_MAX_LENGTH,
     GENDER_NOT_BLANK,
     GENDER_MAX_LENGTH,
@@ -19,5 +27,13 @@ export const MESSAGE_ERROR_MAP = {
     SPECIFIC_ADDRESS_NOT_BLANK,
     WARD_NOT_NULL,
     DISTRICT_NOT_NULL,
-    PROVINCE_NOT_NULL
+    PROVINCE_NOT_NULL,
+    PHONE_MAX_LENGTH,
+    PHONE_NOT_BLANK,
+    EMAIL_NOT_BLANK,
+    EMAIL_MAX_LENGTH,
+    EMAIL_INVALID_FORMAT,
+    PASSWORD_MAX_LENGTH,
+    PASSWORD_MIN_LENGTH,
+    PASSWORD_NOT_BLANK
 }
