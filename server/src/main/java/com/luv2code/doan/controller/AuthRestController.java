@@ -17,6 +17,7 @@ import com.luv2code.doan.service.AccountService;
 import com.luv2code.doan.service.CustomerService;
 import com.luv2code.doan.service.RoleService;
 import com.luv2code.doan.service.StaffService;
+import com.luv2code.doan.utils.MessageErrorMap;
 import com.luv2code.doan.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class AuthRestController {
     @ResponseBody
     public ResponseEntity<?> signup(@RequestBody @Valid SignupRequestBody body, HttpServletRequest request) throws DuplicateException, NotFoundException {
         if (accountService.existsByEmail(body.getEmail())) {
-            throw new DuplicateException("This email address is already being used");
+            throw new DuplicateException(MessageErrorMap.DUPLICATE_EMAIL);
         }
 
         log.info("AuthController body send email: " + body.getEmail());

@@ -26,4 +26,6 @@ public class MessageErrorMap {
 
     public static final String INVALID_FORMAT_DATETIME="Lỗi định dạng datetime!";
 
+    public static final String DUPLICATE_EMAIL = "Địa chỉ email này đã tồn tại!";
+
 }
