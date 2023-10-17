@@ -1,7 +1,6 @@
 package com.luv2code.doan.service.impl;
 
 import com.luv2code.doan.entity.Supplier;
-import com.luv2code.doan.exceptions.BrandNotFoundException;
 import com.luv2code.doan.exceptions.SupplierNotFoundException;
 import com.luv2code.doan.repository.SupplierRepository;
 import com.luv2code.doan.service.SupplierService;

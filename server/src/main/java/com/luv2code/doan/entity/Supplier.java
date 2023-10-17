@@ -1,19 +1,19 @@
 package com.luv2code.doan.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity
-@Table(name = "supplier")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "supplier")
 public class Supplier {
     @Id
     @Column(name="id", length = 10)
