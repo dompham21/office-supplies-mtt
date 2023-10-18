@@ -134,18 +134,18 @@ public class AdminSupplierRestController {
             keyword = pKeyword.get();
         }
         Page page = supplierService.getListSupplierAdmin(pageNo, pageSize, sortField, sortDirection, keyword);
-        java.util.List<Brand> brands = page.getContent();
+        java.util.List<Supplier> suppliers = page.getContent();
         int totalPage = page.getTotalPages();
 
 
-        List<BrandDto> listBrandsDto = new ArrayList<>();
-        for(Brand c : brands) {
-            listBrandsDto.add(new BrandDto(c));
+        List<SupplierDto>  supplierDtoList= new ArrayList<>();
+        for(Supplier s : suppliers) {
+            supplierDtoList.add(new SupplierDto(s));
         }
 
-        ListBrandResponse result = new ListBrandResponse(1, "Get list brands successfully!",
+        ListSupplierResponse result = new ListSupplierResponse(1, "Get list supplier successfully!",
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                listBrandsDto, totalPage, pageNo
+                supplierDtoList, totalPage, pageNo
         );
 
         return new ResponseEntity(result, HttpStatus.OK);
