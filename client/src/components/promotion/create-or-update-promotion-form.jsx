@@ -52,13 +52,6 @@ const promotionValidationSchema = yup.object().shape({
   promotionDetails: yup.array()
   .min(1, "Should have 1 promotion details")
   .of(yup.object().shape(promotionDetailsSchema))
-  // .test("unique", "Each Product must be unique", function (values) {
-  //   const ids = values.map((item) => item.productId);
-  //   console.log(values)
-  //   const uniqueIds = [...new Set(ids)]; // creates an array of unique ids
-  //   return uniqueIds.length === ids.length; // returns true if all ids are unique
-  // })
-
 });
 
 

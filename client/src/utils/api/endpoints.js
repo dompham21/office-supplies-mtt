@@ -69,6 +69,22 @@ export const API_ENDPOINTS = {
     BRAND_UPDATE_ADMIN: "admin/brand/update",
     BRAND_ADD_ADMIN: "admin/brand/add",
 
+    PURCHASE_ORDERS_ADMIN: "admin/purchase-order",
+    PURCHASE_ORDERS_ACTIVE_ADMIN: "admin/purchase-order/active",
+    PURCHASE_ORDER_ADD_ADMIN: "admin/purchase-order/add",
+
+    RECEIPTS_ADMIN: "admin/receipt",
+    RECEIPT_ADD_ADMIN: "admin/receipt/add",
+
+    SUPPLIERS_ADMIN: "admin/supplier",
+    SUPPLIERS_DELETE: "admin/supplier/delete",
+    SUPPLIERS_APPROVE: "admin/supplier/approve",
+    SUPPLIERS_UPDATE_ADMIN: "admin/supplier/update",
+    SUPPLIERS_ADD_ADMIN: "admin/supplier/add",
+    SUPPLIERS_PRODUCT_ADMIN: "admin/supplier/product",
+    SUPPLIERS: "supplier",
+
+
     REPORT_ANLYTICS: "admin/report/analytics",
     REPORT_SALE_HISTORY: "admin/report/revenue",
     REPORT_SALE_HISTORY_BETWEEN: "admin/report/revenue/between",

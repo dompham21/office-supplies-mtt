@@ -1,14 +1,17 @@
 package com.luv2code.doan.controller;
 
 import com.luv2code.doan.dto.BrandDto;
+import com.luv2code.doan.dto.ProductDto;
 import com.luv2code.doan.dto.SupplierDto;
 import com.luv2code.doan.entity.Brand;
+import com.luv2code.doan.entity.Product;
 import com.luv2code.doan.entity.Supplier;
 import com.luv2code.doan.exceptions.BrandNotFoundException;
+import com.luv2code.doan.exceptions.DuplicateException;
 import com.luv2code.doan.exceptions.SupplierNotFoundException;
 import com.luv2code.doan.request.SupplierRequest;
 import com.luv2code.doan.response.*;
-import com.luv2code.doan.service.SupplierService;
+import com.luv2code.doan.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +37,23 @@ public class AdminSupplierRestController {
     @Autowired
     private SupplierService supplierService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private PriceHistoryService priceHistoryService;
+
+    @Autowired
+    private ImageProductService imageProductService;
+
+    @Autowired
+    private PromotionService promotionService;
+
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierRequest body, HttpServletRequest request) {
+    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierRequest body, HttpServletRequest request) throws DuplicateException {
+        supplierService.checkDupplicateIdSupplier(body.getId());
+
         Supplier supplier = new Supplier();
         supplier.setId(body.getId());
         supplier.setName(body.getName());
@@ -134,18 +151,19 @@ public class AdminSupplierRestController {
             keyword = pKeyword.get();
         }
         Page page = supplierService.getListSupplierAdmin(pageNo, pageSize, sortField, sortDirection, keyword);
-        java.util.List<Supplier> suppliers = page.getContent();
+        List<Supplier> suppliers = page.getContent();
         int totalPage = page.getTotalPages();
 
 
-        List<SupplierDto>  supplierDtoList= new ArrayList<>();
-        for(Supplier s : suppliers) {
-            supplierDtoList.add(new SupplierDto(s));
+        List<SupplierDto> listSupplierDto = new ArrayList<>();
+        for(Supplier c : suppliers) {
+            listSupplierDto.add(new SupplierDto(c));
         }
 
-        ListSupplierResponse result = new ListSupplierResponse(1, "Get list supplier successfully!",
+        ListSupplierResponse result = new ListSupplierResponse(1, "Get list suppliers successfully!",
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                supplierDtoList, totalPage, pageNo
+                listSupplierDto, totalPage, pageNo
+
         );
 
         return new ResponseEntity(result, HttpStatus.OK);
@@ -161,4 +179,29 @@ public class AdminSupplierRestController {
                 HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), supplierDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<ListProductResponse> getListProductBySupplier(@PathVariable String id, HttpServletRequest request) throws SupplierNotFoundException {
+        Supplier supplier = supplierService.getSupplierById(id);
+
+        List<Product> listProduct = (List<Product>) supplier.getProducts();
+
+        List<ProductDto> listProductsDto = new ArrayList<>();
+        for(Product p : listProduct) {
+            List<String> listImages = productService.getListImagesStringByProduct(p.getId());
+            listProductsDto.add(new ProductDto(
+                    p, promotionService.getCurrentPromotionByProduct(p),
+                    priceHistoryService.getPriceFromProductId(p.getId()),
+                    productService.getSoldQuantity(p.getId()),
+                    listImages));
+        }
+
+        ListProductResponse result = new ListProductResponse(1, "Get list products successfully!",
+                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                listProductsDto, null, null
+        );
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
