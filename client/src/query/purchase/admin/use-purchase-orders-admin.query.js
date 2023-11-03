@@ -1,4 +1,4 @@
-import{ getAuthorization } from "@utils/api/AxiosService";
+import { getAuthorization } from "@utils/api/AxiosService";
 import { API_ENDPOINTS } from '@utils/api/endpoints';
 import {
 QueryKey,
@@ -8,7 +8,7 @@ useQuery,
 } from 'react-query';
 
 
-const fetchProducts = async ({ queryKey }) => {
+const fetchPurchaseOrders = async ({ queryKey }) => {
     const [_key, params] = queryKey;
     const {
         pageNo,
@@ -18,11 +18,11 @@ const fetchProducts = async ({ queryKey }) => {
         } = params
 
     
-    const response = await getAuthorization(API_ENDPOINTS.PRODUCTS_ADMIN, params);
+    const response = await getAuthorization(API_ENDPOINTS.PURCHASE_ORDERS_ADMIN, params);
     const { data } = response;
 
     return {
-        products: data.data,
+        purchaseOrders: data.data,
         totalPage: data?.totalPage,
         pageNo: data?.pageNum
      };
@@ -32,18 +32,18 @@ const fetchProducts = async ({ queryKey }) => {
 
 
 
-const useProductsQuery = ( params ) => {
+const usePurchaseOrdersQuery = ( params ) => {
     return useQuery(
-        [API_ENDPOINTS.PRODUCTS_ADMIN, params],
-        fetchProducts,
+        [API_ENDPOINTS.PURCHASE_ORDERS_ADMIN, params],
+        fetchPurchaseOrders,
         {   
             retry: false,
             keepPreviousData: true,
-            refetchOnWindowFocus: false,
+            refetchOnWindowFocus: false
 
         }
     );
 };
 
-export { useProductsQuery, fetchProducts };
+export { usePurchaseOrdersQuery, fetchPurchaseOrders };
 

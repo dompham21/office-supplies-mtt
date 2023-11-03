@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "purchase_order")
@@ -31,4 +33,10 @@ public class PurchaseOrder {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
+
+    @OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PurchaseOrderDetail> purchaseOrderDetails = new ArrayList<>();
 }

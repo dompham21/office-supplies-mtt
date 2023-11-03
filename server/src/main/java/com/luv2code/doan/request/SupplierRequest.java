@@ -27,7 +27,7 @@ public class SupplierRequest {
     private String email;
 
     @NotBlank(message = "Phone must not be blank")
-    @Size(max = 11, message = "Phone should be less than 64 characters")
+    @Size(max = 11, message = "Phone should be less than 11 characters")
     private String phone;
 
     @NotNull(message = "Is active must not be null")
