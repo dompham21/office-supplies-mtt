@@ -4,10 +4,7 @@ import com.luv2code.doan.entity.Account;
 import com.luv2code.doan.entity.ImageProduct;
 import com.luv2code.doan.entity.Product;
 import com.luv2code.doan.entity.Staff;
-import com.luv2code.doan.exceptions.BrandNotFoundException;
-import com.luv2code.doan.exceptions.CategoryNotFoundException;
-import com.luv2code.doan.exceptions.DuplicateException;
-import com.luv2code.doan.exceptions.ProductNotFoundException;
+import com.luv2code.doan.exceptions.*;
 
 import com.luv2code.doan.request.ProductRequest;
 import org.springframework.data.domain.Page;
@@ -21,9 +18,9 @@ public interface ProductService {
     public Product getProductByName(String name);
 
 
-    public Product updateProduct(ProductRequest product, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException;
+    public Product updateProduct(ProductRequest product, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException, SupplierNotFoundException;
 
-    public Product addProduct(ProductRequest product, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException;
+    public Product addProduct(ProductRequest product, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException, SupplierNotFoundException;
 
     public int getCountByCategoryId(String categoryId) throws CategoryNotFoundException;
 

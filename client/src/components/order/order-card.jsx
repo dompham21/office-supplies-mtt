@@ -181,8 +181,7 @@ function OrderCard({order, type, params}) {
                   if (response) {
                       const { result, code, status, msg } = response;
                       if(result == 1) {
-                        window.open(response.data, "_blank");
-                        router.push('/user/order')
+                        window.open(response.data, "_self");
                       }
                       else if(result == 0) {
                         toast.error(msg, {

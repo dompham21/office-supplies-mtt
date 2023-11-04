@@ -1,10 +1,7 @@
 package com.luv2code.doan.service.impl;
 
 import com.luv2code.doan.entity.*;
-import com.luv2code.doan.exceptions.BrandNotFoundException;
-import com.luv2code.doan.exceptions.CategoryNotFoundException;
-import com.luv2code.doan.exceptions.DuplicateException;
-import com.luv2code.doan.exceptions.ProductNotFoundException;
+import com.luv2code.doan.exceptions.*;
 import com.luv2code.doan.repository.CategoryRepository;
 import com.luv2code.doan.repository.ImageProductRepository;
 import com.luv2code.doan.repository.ProductRepository;
@@ -48,6 +45,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private PriceHistoryService priceHistoryService;
 
+    @Autowired
+    private SupplierService supplierService;
+
 
 
     public Product getProductByName(String name) {
@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product updateProduct(ProductRequest body, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException {
+    public Product updateProduct(ProductRequest body, Staff staff) throws ProductNotFoundException, DuplicateException, BrandNotFoundException, CategoryNotFoundException, SupplierNotFoundException {
 
         Product product = this.getProductById(body.getId());
 
@@ -67,13 +67,14 @@ public class ProductServiceImpl implements ProductService {
         }
         Brand brand = brandService.getBrandById(body.getBrandId());
         Category category = categoryService.getCategoryById(body.getCategoryId());
+        Supplier supplier = supplierService.getSupplierById(body.getSupplierId());
 
         product.setIsActive(body.getActive());
         product.setName(body.getName());
         product.setDescription(body.getDescription());
         product.setBrands(brand);
         product.setCategories(category);
-        product.setInStock(body.getInStock());
+        product.setSuppliers(supplier);
 
         Product productAfterSave = this.saveProduct(product);
 
@@ -112,9 +113,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product addProduct(ProductRequest body, Staff staff) throws DuplicateException, BrandNotFoundException, CategoryNotFoundException {
+    public Product addProduct(ProductRequest body, Staff staff) throws DuplicateException, BrandNotFoundException, CategoryNotFoundException, SupplierNotFoundException {
         Brand brand = brandService.getBrandById(body.getBrandId());
         Category category = categoryService.getCategoryById(body.getCategoryId());
+        Supplier supplier = supplierService.getSupplierById(body.getSupplierId());
+
 
 
         if(this.existsById(body.getId().trim())) {
@@ -130,7 +133,8 @@ public class ProductServiceImpl implements ProductService {
         product.setIsActive(body.getActive());
         product.setName(body.getName());
         product.setDescription(body.getDescription());
-        product.setInStock(body.getInStock());
+        product.setInStock(0);
+        product.setSuppliers(supplier);
         product.setBrands(brand);
         product.setCategories(category);
         product.setRegistrationDate(new Date());

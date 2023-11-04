@@ -39,10 +39,10 @@ public class ProductRequest {
     @NotNull(message = "Brand must not be null")
     private String brandId;
 
+    @NotNull(message = "Supplier must not be null")
+    private String supplierId;
+
     @NotNull(message = "Is active must not be null")
     private Boolean active;
 
-    @NotNull(message = "In stock must not be null")
-    @Min(message = "In stock should be greater than equal 0", value = 0)
-    private Integer inStock;
 }
