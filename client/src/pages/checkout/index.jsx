@@ -295,7 +295,6 @@ export default function Checkout() {
         address:concatAddress(values.specificAddress?.trim(), valueWard, valueDistrict, valueProvince),
         carts: checkedListCart
       };
-      console.log("🚀 ~ file: index.jsx:300 ~ onSubmit ~ input:", input)
 
       checkout(
         {
@@ -318,10 +317,9 @@ export default function Checkout() {
                       progress: undefined,
                       theme: "light",
                     });
-                    window.open(response.data, "_blank");
+                    window.open(response.data, "_self");
 
                     sessionStorage.removeItem(CHECKED_LIST)
-                    router.push('/user/order')
                   }
                   else if(result == 0) {
                     toast.error(msg, {

@@ -79,7 +79,7 @@ public class AdminProductRestController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> addProduct(Authentication authentication, @Valid @RequestBody ProductRequest body, HttpServletRequest request) throws BrandNotFoundException, CategoryNotFoundException, IOException, UserNotFoundException, NotFoundException, DuplicateException, ProductNotFoundException {
+    public ResponseEntity<?> addProduct(Authentication authentication, @Valid @RequestBody ProductRequest body, HttpServletRequest request) throws BrandNotFoundException, CategoryNotFoundException, IOException, UserNotFoundException, NotFoundException, DuplicateException, ProductNotFoundException, SupplierNotFoundException {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
@@ -100,7 +100,7 @@ public class AdminProductRestController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateProduct(Authentication authentication, @PathVariable String id, @Valid @RequestBody ProductRequest body, HttpServletRequest request) throws BrandNotFoundException, CategoryNotFoundException, ProductNotFoundException, UserNotFoundException, NotFoundException, DuplicateException {
+    public ResponseEntity<?> updateProduct(Authentication authentication, @PathVariable String id, @Valid @RequestBody ProductRequest body, HttpServletRequest request) throws BrandNotFoundException, CategoryNotFoundException, ProductNotFoundException, UserNotFoundException, NotFoundException, DuplicateException, SupplierNotFoundException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Staff staff = staffService.getStaffByEmail(userPrincipal.getEmail());
