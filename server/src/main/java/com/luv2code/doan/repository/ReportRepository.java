@@ -40,6 +40,25 @@ public interface ReportRepository extends JpaRepository<Order, Integer> {
     @Query(value = "SET DATEFIRST 1; SELECT count(*) FROM the_order WHERE YEAR([created_at]) = YEAR(GETDATE()) and status_id = :statusId", nativeQuery = true)
     public long countOrderByYearAndStatusId(Integer statusId);
 
+    @Query(value = "SELECT count(*) FROM the_order WHERE DATEPART(WEEK, [created_at]) = DATEPART(WEEK, GETDATE()) and status_id = 5 AND reason_cancel_id = :reason", nativeQuery = true)
+    public long countListOrderCancelByWeekAndReason(int reason);
+
+    @Query(value = "SELECT count(*) FROM the_order WHERE MONTH([created_at]) = MONTH(GETDATE()) and status_id = 5 AND reason_cancel_id = :reason", nativeQuery = true)
+    public long countListOrderCancelByMonthAndReason(int reason);
+
+    @Query(value = "SELECT count(*) FROM the_order WHERE YEAR([created_at]) = YEAR(GETDATE()) and status_id = 5 AND reason_cancel_id = :reason", nativeQuery = true)
+    public long countListOrderCancelByYearAndReason(int reason);
+
+
+    @Query(value = "SELECT count(*) FROM the_order WHERE DATEPART(WEEK, [created_at]) = DATEPART(WEEK, GETDATE())", nativeQuery = true)
+    public long countOrderByWeek();
+
+    @Query(value = "SELECT count(*) FROM the_order WHERE MONTH([created_at]) = MONTH(GETDATE())", nativeQuery = true)
+    public long countOrderByMonth();
+
+    @Query(value = "SELECT count(*) FROM the_order WHERE YEAR([created_at]) = YEAR(GETDATE())", nativeQuery = true)
+    public long countOrderByYear();
+
     @Query(value = "CALL sp_get_total_revenue_month(:month, :year );", nativeQuery = true)
     public double getTotalRevenueInMonth(int month, int year);
 
@@ -61,7 +80,7 @@ public interface ReportRepository extends JpaRepository<Order, Integer> {
     @Query(value = "CALL sp_get_total_revenue_user(:month, :year, :userId );", nativeQuery = true)
     public double getTotalReviewInMonthOfUser(int month, int year, int userId);
 
-    @Query(value = "CALL sp_sold_by_category();", nativeQuery = true)
+    @Query(value = "EXEC SOLD_BY_CATEGORY", nativeQuery = true)
     public List<Object[]> getSoldByCategory();
 
     @Query(value = "EXEC BAO_CAO_DOANH_THU_N_NGAY_GAN_NHAT :n", nativeQuery = true)
@@ -72,6 +91,9 @@ public interface ReportRepository extends JpaRepository<Order, Integer> {
 
     @Query(value = "EXEC BAO_CAO_DOANH_THU_THEO_KHOANG :fromDate,:toDate", nativeQuery = true)
     public List<Object[]> getRevenueBetweenTwoDate(Date fromDate, Date toDate);
+
+    @Query(value = "EXEC BAO_CAO_LOI_NHUAN_THEO_KHOANG :fromDate,:toDate", nativeQuery = true)
+    public List<Object[]> getProfitBetweenTwoDate(Date fromDate, Date toDate);
 
     @Query("SELECT COUNT(c) FROM Customer c WHERE c.registrationDate >= :date30DaysAgo")
     long countUsersRegisteredWithin30Days(Date date30DaysAgo);

@@ -51,6 +51,10 @@ public class Order {
     @JoinColumn(name="status_id")
     private OrderStatus status;
 
+    @ManyToOne
+    @JoinColumn(name="reason_cancel_id")
+    private OrderReasonCancel reasonCancel;
+
     //orphanRemoval mean remove orderDetail when remove order
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();

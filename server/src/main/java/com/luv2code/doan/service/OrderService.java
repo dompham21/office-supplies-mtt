@@ -33,7 +33,7 @@ public interface OrderService {
 
     public boolean isUserHasBuyProduct(Integer userId, Integer productId);
 
-    public Order cancelOrder(Order order);
+    public Order cancelOrder(Order order, OrderReasonCancel orderReasonCancel);
     public boolean checkOrderDeliveryByShipper(String staffId, Integer orderId);
 
     public Page<Order> getOrderByUserAndStatus(Integer userId, Integer statusId, Integer pageNum, Integer pageSize, Date fromDate, Date toDate);

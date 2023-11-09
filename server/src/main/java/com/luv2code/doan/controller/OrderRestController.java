@@ -8,6 +8,7 @@ import com.luv2code.doan.exceptions.*;
 import com.luv2code.doan.principal.UserPrincipal;
 import com.luv2code.doan.request.AddressRequest;
 import com.luv2code.doan.request.ChangeOrderStatusRequest;
+import com.luv2code.doan.request.OrderCancelRequest;
 import com.luv2code.doan.request.OrderRequest;
 import com.luv2code.doan.response.*;
 import com.luv2code.doan.service.*;
@@ -62,6 +63,9 @@ public class OrderRestController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private OrderReasonCancelService orderReasonCancelService;
 
 
 
@@ -220,7 +224,7 @@ public class OrderRestController {
 
     @RequestMapping(value = "/request-cancel/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    private ResponseEntity<?> requestCancel(@PathVariable("id") Integer id, Authentication authentication, HttpServletRequest request) throws  OrderNotFoundException, NotFoundException {
+    private ResponseEntity<?> requestCancel(@PathVariable("id") Integer id, @RequestBody @Valid OrderCancelRequest orderCancelRequest, Authentication authentication, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Customer customer = customerService.getCustomerByEmail(userPrincipal.getEmail());
         Order order = orderService.getOrder(id, customer);
@@ -229,12 +233,57 @@ public class OrderRestController {
         if(orderStatusId != 1) {
             throw new NotFoundException("Trạng thái hiện tại của đơn đặt hàng không thể yêu cầu huỷ!");
         }
+        OrderReasonCancel orderReasonCancel = orderReasonCancelService.getOrderReasonCancelById(orderCancelRequest.getReasonCancel());
 
-        orderService.cancelOrder(order);
+        orderService.cancelOrder(order, orderReasonCancel);
 
-        BaseResponse result = new BaseResponse(1, "Change order status order successfully!",
-                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value()
+        List<OrderDetailDto> orderDetailsDto = new ArrayList<>();
+
+        for(OrderDetail od : order.getOrderDetails()) {
+            Review review = reviewService.getReviewByUserIdAndProductId(customer.getId(), od.getProduct().getId());
+            Product product = od.getProduct();
+            if(review != null) {
+                orderDetailsDto.add(new OrderDetailDto(od,
+                        new ProductDto(product,
+                                promotionService.getCurrentPromotionByProduct(product),
+                                priceHistoryService.getPriceFromProductId(product.getId()),
+                                productService.getSoldQuantity(product.getId()),
+                                productService.getListImagesStringByProduct(product.getId())), true));
+            }
+            else {
+                orderDetailsDto.add(new OrderDetailDto(od,
+                        new ProductDto(product,
+                                promotionService.getCurrentPromotionByProduct(product),
+                                priceHistoryService.getPriceFromProductId(product.getId()),
+                                productService.getSoldQuantity(product.getId()),
+                                productService.getListImagesStringByProduct(product.getId())), false));
+            }
+
+        }
+        double total =  orderService.getTotalByOrder(order);
+
+        OrderDto orderDto = new OrderDto(order, total);
+        List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
+        List<OrderDetail> listOrderDetail = order.getOrderDetails();
+
+        for(OrderDetail orderDetail : listOrderDetail) {
+            Product product = orderDetail.getProduct();
+            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+                    new ProductDto(product,
+                            promotionService.getCurrentPromotionByProduct(product),
+                            priceHistoryService.getPriceFromProductId(product.getId()),
+                            productService.getSoldQuantity(product.getId()),
+                            productService.getListImagesStringByProduct(product.getId())));
+            listOrderDetailDto.add(orderDetailDto);
+        }
+        orderDto.setOrderDetails(listOrderDetailDto);
+
+
+        OrderResponse result = new OrderResponse(1, "Get list order detail successfully!",
+                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                orderDto
         );
+
         return new ResponseEntity(result, HttpStatus.OK);
     }
 

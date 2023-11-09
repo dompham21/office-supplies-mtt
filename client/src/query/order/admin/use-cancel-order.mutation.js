@@ -6,7 +6,7 @@ import{ putAuthorization } from "@utils/api/AxiosService";
 export const useCancelOrderMutation = () => {
   const queryClient = useQueryClient();
 
-    return useMutation(async ({ id })  =>
-      await putAuthorization(`${API_ENDPOINTS.ORDERS_CANCEL_ADMIN}/${id}`)
+    return useMutation(async ({ id, variables })  =>
+      await putAuthorization(`${API_ENDPOINTS.ORDERS_CANCEL_ADMIN}/${id}`, variables)
     );
 };

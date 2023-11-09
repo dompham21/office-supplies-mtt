@@ -1,9 +1,12 @@
 package com.luv2code.doan.service.impl;
 
 import com.luv2code.doan.bean.*;
+import com.luv2code.doan.entity.Order;
+import com.luv2code.doan.entity.OrderReasonCancel;
 import com.luv2code.doan.entity.OrderStatus;
 import com.luv2code.doan.exceptions.OrderStatusNotFoundException;
 import com.luv2code.doan.repository.ReportRepository;
+import com.luv2code.doan.service.OrderReasonCancelService;
 import com.luv2code.doan.service.OrderStatusService;
 import com.luv2code.doan.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderStatusService orderStatusService;
+
+    @Autowired
+    private OrderReasonCancelService orderReasonCancelService;
 
     public long getTotalReviewInMonth() {
         Date currentDate = new Date();
@@ -225,6 +231,37 @@ public class ReportServiceImpl implements ReportService {
         return list;
     }
 
+    public List<ReportItem> reportOrderCancel(Integer type) {
+
+        List<ReportItem> list = new ArrayList<>();
+
+
+        List<OrderReasonCancel> listOrderStatus = orderReasonCancelService.listOrderReasonCancel();
+
+        for(OrderReasonCancel reason : listOrderStatus) {
+            ReportItem item = new ReportItem();
+            item.setName(reason.getName());
+            switch (type){
+                case 0: { // year
+                    item.setValue(countOrderCancelByYearAndReason(reason.getId()));
+                    break;
+                }
+                case 1: { //month
+                    item.setValue(countOrderCancelByMonthAndReason(reason.getId()));
+                    break;
+                }
+                case 2: { //week
+                    item.setValue(countOrderCancelByWeekAndReason(reason.getId()));
+                    break;
+                }
+            }
+
+            list.add(item);
+        }
+
+        return list;
+    }
+
     public long countOrderByWeekAndStatusId(Integer statusId) throws OrderStatusNotFoundException {
         OrderStatus orderStatus = orderStatusService.getOrderStatusById(statusId);
         return reportRepository.countOrderByWeekAndStatusId(orderStatus.getId());
@@ -238,6 +275,33 @@ public class ReportServiceImpl implements ReportService {
     public long countOrderByYearAndStatusId(Integer statusId) throws OrderStatusNotFoundException {
         OrderStatus orderStatus = orderStatusService.getOrderStatusById(statusId);
         return reportRepository.countOrderByYearAndStatusId(orderStatus.getId());
+    }
+
+    @Override
+    public long countOrderByWeek() {
+        return reportRepository.countOrderByWeek();
+    }
+
+    @Override
+    public long countOrderByMonth() {
+        return reportRepository.countOrderByMonth();
+    }
+
+    @Override
+    public long countOrderByYear() {
+        return reportRepository.countOrderByYear();
+    }
+
+    public long countOrderCancelByWeekAndReason(int reason) {
+        return reportRepository.countListOrderCancelByWeekAndReason(reason);
+    }
+
+    public long countOrderCancelByMonthAndReason(int reason) {
+        return reportRepository.countListOrderCancelByMonthAndReason(reason);
+    }
+
+    public long countOrderCancelByYearAndReason(int reason) {
+        return reportRepository.countListOrderCancelByYearAndReason(reason);
     }
 
     public List<ReportItem> getOverviewUserByWeek() {
@@ -372,7 +436,7 @@ public class ReportServiceImpl implements ReportService {
         for (Object[] result : results) {
             SoldByCategoryItem item = new SoldByCategoryItem();
             item.setName((String) result[0]);
-            item.setTotalSold(((BigDecimal) result[1]).doubleValue());
+            item.setTotalSold((Integer) result[1]);
             list.add(item);
         }
 
@@ -397,6 +461,24 @@ public class ReportServiceImpl implements ReportService {
     public List<RevenueYearItem> getRevenueBetweenTwoDate(Date fromDate, Date toDate) {
         List<RevenueYearItem> list = new ArrayList<>();
         List<Object[]> results = reportRepository.getRevenueBetweenTwoDate(fromDate, toDate);
+
+        for (Object[] result : results) {
+            RevenueYearItem item = new RevenueYearItem();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+
+            // Format the date using the SimpleDateFormat
+            String formattedDate = sdf.format((Date) result[0]);
+
+            item.setMonth(formattedDate);
+            item.setTotal((Double) result[1]);
+            list.add(item);
+        }
+        return list;
+    }
+
+    public List<RevenueYearItem> getProfitBetweenTwoDate(Date fromDate, Date toDate) {
+        List<RevenueYearItem> list = new ArrayList<>();
+        List<Object[]> results = reportRepository.getProfitBetweenTwoDate(fromDate, toDate);
 
         for (Object[] result : results) {
             RevenueYearItem item = new RevenueYearItem();

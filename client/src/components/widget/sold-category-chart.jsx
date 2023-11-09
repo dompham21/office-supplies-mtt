@@ -52,7 +52,7 @@ function SoldCategoryChart({
     return (
         <div className="bg-light shadow-sm rounded w-full h-full">
             <div className="p-8 flex items-center justify-between">
-                <h3 className="text-sm font-bold text-heading">Sold by Category</h3>
+                <h3 className="text-sm font-bold text-heading">Bán theo danh mục</h3>
             </div>
 
             {

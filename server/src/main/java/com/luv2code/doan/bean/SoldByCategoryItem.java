@@ -5,12 +5,12 @@ import javax.persistence.Id;
 
 public class SoldByCategoryItem {
     private String name;
-    private Double totalSold;
+    private Integer totalSold;
 
     public SoldByCategoryItem() {
     }
 
-    public SoldByCategoryItem(String name, Double totalSold) {
+    public SoldByCategoryItem(String name, Integer totalSold) {
         this.name = name;
         this.totalSold = totalSold;
     }
@@ -23,11 +23,11 @@ public class SoldByCategoryItem {
         this.name = name;
     }
 
-    public Double getTotalSold() {
+    public Integer getTotalSold() {
         return totalSold;
     }
 
-    public void setTotalSold(Double totalSold) {
+    public void setTotalSold(Integer totalSold) {
         this.totalSold = totalSold;
     }
 }

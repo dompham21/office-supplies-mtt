@@ -88,8 +88,11 @@ export const API_ENDPOINTS = {
     REPORT_ANLYTICS: "admin/report/analytics",
     REPORT_SALE_HISTORY: "admin/report/revenue",
     REPORT_SALE_HISTORY_BETWEEN: "admin/report/revenue/between",
+    REPORT_PROFIT_BETWEEN: "admin/report/profit/between",
+
     REPORT_SOLD_BY_CATEGORY: "admin/report/category",
     REPORT_ORDER_OVERVIEW: "admin/report/order",
+    REPORT_ORDER_CANCEL_OVERVIEW: "admin/report/order-cancel",
     REPORT_USER_OVERVIEW: "admin/report/user",
     REPORT_REVIEW_OVERVIEW: "admin/report/review",
 

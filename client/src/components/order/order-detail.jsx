@@ -5,7 +5,7 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useRequestCancelMutation } from '@data/order/request-cancel-order.mutation';
 import { API_ENDPOINTS } from '@utils/api/endpoints';
 import { useQueryClient } from 'react-query'
-import { Button, Modal, notification } from 'antd';
+import { Button, Modal, Select, notification } from 'antd';
 import { useRouter } from 'next/router';
 import ModalReviewProduct from '@components/review/modal-review';
 import { toast } from 'react-toastify';
@@ -19,6 +19,8 @@ const { confirm } = Modal;
 
 function OrderDetail({order}) {
   const router = useRouter()
+  const [isModalOpenCancelOrder, setIsModalOpenCancelOrder] = useState(false);
+  const [reasonCancel, setReasonCancel] = useState(null);
   const [isModalOpen, setIsOpen] = useState(false);
   const [productReview, setProductReview] = useState(null);
 
@@ -52,129 +54,142 @@ function OrderDetail({order}) {
         default:
             return null;
     }
-}
-
-const renderButton = (id) => {
-  if(id == null) {
-      return null;
   }
 
-  switch(id) {
-      case 1:
-          return (
-            <div className='flex gap-2'>
-              <Button className='w-44' type='primary' loading={isLoadingRequestCancel} style={{height:'40px'}} onClick={handleCancleOrder}>Huỷ đơn hàng</Button>
-              <Button className='w-44' type='primary' loading={isLoadingRetry} style={{height:'40px'}} onClick={handleRetryPayment}>Thanh toán</Button>
-            </div>
-          )
-           
-      case 2:
-      case 3:
-          return <Button className='w-44' disabled={true} style={{height:'40px'}}>Đang xử lý</Button>
-      default:
-          return null;
-  }
-}
+  const renderButton = (id) => {
+    if(id == null) {
+        return null;
+    }
 
-const handleCancleOrder = () => {
-  confirm({
-      title: 'Bạn có muốn huỷ đơn hàng này không?',
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-          requestCancel(
-              {
-                id: id
-              },
-              {
-                onSuccess: ( value ) => {
-                    const response  = value.data
-      
-                    if (response) {
-                        const { result, code, data, status, msg } = response;
-                        if(result == 1) {
-
-                          queryClient.setQueryData(
-                            [API_ENDPOINTS.ORDER_DETAIL, id.toString()],
-                            (oldData) => oldData ? {
-                              ...oldData,
-                              order: data
-                            } : oldData
-                          )
-
-                          toast.success('Huỷ đơn hàng thành công!', {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                          });               
-                        }
-                        else if(result == 0) {
-                          toast.error(msg, {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
-                        }
-                    } else {
-                      toast.error('Huỷ đơn hàng thất bại!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                    }
-                },
-                onError: (error) => {
-                  if(error?.response?.status == 400) {
-                    if(error?.response?.data?.msg) {
-
-                      toast.error(error?.response?.data?.msg, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                    }
-                  }
-                  else {
-                    toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "light",
-                    });
-                  }
-                    
-                },
-                onSettled: () => {
-                  queryClient.invalidateQueries({ queryKey:[API_ENDPOINTS.ORDER_DETAIL, id?.toString]});
-                },
-                
-              }
+    switch(id) {
+        case 1:
+            return (
+              <div className='flex gap-2'>
+                <Button className='w-44' type='primary' loading={isLoadingRequestCancel} style={{height:'40px'}} onClick={()=>setIsModalOpenCancelOrder(true)}>Huỷ đơn hàng</Button>
+                <Button className='w-44' type='primary' loading={isLoadingRetry} style={{height:'40px'}} onClick={handleRetryPayment}>Thanh toán</Button>
+              </div>
             )
+            
+        case 2:
+        case 3:
+            return <Button className='w-44' disabled={true} style={{height:'40px'}}>Đang xử lý</Button>
+        default:
+            return null;
+    }
+  }
+
+const handleCancelOrder = () => {
+  if(!reasonCancel) {
+    toast.error('Vui lòng chọn lý do huỷ đơn hàng!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+  else {
+    requestCancel(
+      {
+        id: id,
+        variables: {
+          reasonCancel
+        }
+      },
+      {
+        onSuccess: ( value ) => {
+            const response  = value.data
+
+            if (response) {
+                const { result, code, data, status, msg } = response;
+                if(result == 1) {
+
+                  queryClient.setQueryData(
+                    [API_ENDPOINTS.ORDER_DETAIL, id.toString()],
+                    (oldData) => oldData ? {
+                      ...oldData,
+                      order: data
+                    } : oldData
+                  )
+
+                  toast.success('Huỷ đơn hàng thành công!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });               
+                }
+                else if(result == 0) {
+                  toast.error(msg, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                }
+            } else {
+              toast.error('Huỷ đơn hàng thất bại!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
+        },
+        onError: (error) => {
+          if(error?.response?.status == 400) {
+            if(error?.response?.data?.msg) {
+
+              toast.error(error?.response?.data?.msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
+          }
+          else {
+            toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+            
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey:[API_ENDPOINTS.ORDER_DETAIL, id?.toString]});
+        },
+        
       }
-  });
+    )
+    setIsModalOpenCancelOrder(false)
+  }
+  
 }
 
 const handleRetryPayment = () => {
@@ -266,6 +281,10 @@ const handleOpenReviewModal = (e, product) => {
 
 }
 
+const handleChangeReasonCancel = (value) => {
+  setReasonCancel(value)
+};
+
   return (
       <div>
         {contextHolder}
@@ -273,6 +292,21 @@ const handleOpenReviewModal = (e, product) => {
           isModalOpen &&
           <ModalReviewProduct orderId={id} isModalOpen={isModalOpen} productReview={productReview} handleCancelModalReview={handleCancelModalReview}></ModalReviewProduct>
         }
+        <Modal title="Huỷ đơn hàng" open={isModalOpenCancelOrder} onOk={handleCancelOrder} onCancel={()=>setIsModalOpenCancelOrder(false)} destroyOnClose={true}>
+          <div className='my-2 text-sm'>Chọn lý do huỷ:</div>
+          <Select
+            className='w-full'
+            placeholder="Lý do huỷ"
+            onChange={handleChangeReasonCancel}
+            options={[
+              { value: 1, label: 'Tôi muốn thay đổi sản phẩm' },
+              { value: 2, label: 'Tôi tìm thấy chỗ mua khác tốt hơn' },
+              { value: 3, label: 'Tôi không có nhu cầu mua nữa' },
+              { value: 4, label: 'Phí vận chuyển cao'},
+              { value: 5, label: 'Khác'},
+            ]}
+          />
+        </Modal>
         <div className='bg-white rounded shadow-sm px-6 py-5 flex justify-between items-center border-b'>
           <div>Ngày tạo: {formatDateDDMMYYYY(date)}</div>
           <div>

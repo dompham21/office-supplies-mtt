@@ -11,7 +11,7 @@ import { Table } from "@components/ui/table";
 import { default as productPlaceholder } from '@assets/placeholders/product.svg';
 import { currencyMoney } from "@utils/format-currency";
 import { formatAddress } from "@utils/format-address";
-import { Steps, Button, Modal } from 'antd';
+import { Steps, Button, Modal, Select } from 'antd';
 import { LoadingOutlined, SmileOutlined, CloseCircleOutlined, ExclamationCircleFilled, ArrowLeftOutlined, StopOutlined, PrinterOutlined, DeliveredProcedureOutlined  } from '@ant-design/icons';
 import ValidationError from "@components/ui/form-validation-error";
 import { useCancelOrderMutation, useChangeOrderStatusMutation } from "@data/order/admin/use-cancel-order.mutation";
@@ -37,6 +37,8 @@ export default function OrderDetailsPage() {
   const { query } = useRouter();
   const { mutate: setShipper, isLoading: updating } = useSetShipperMutation();
   const { mutate: cancelOrder, isLoading: canceling } = useCancelOrderMutation();
+  const [reasonCancel, setReasonCancel] = useState(null);
+  const [isModalOpenCancelOrder, setIsModalOpenCancelOrder] = useState(false);
 
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -198,103 +200,112 @@ export default function OrderDetailsPage() {
     else "process"
   }
 
-  const onSubmitCancelOrder = () => {
-     
-    confirm({
-        title: 'Bạn có chắc muốn huỷ đơn hàng này không?',
-        icon: <ExclamationCircleFilled />,
-        centered: true,
-        cancelText: 'Huỷ Bỏ',
-        okText: 'Đồng ý',
-        onOk() {
-            cancelOrder(
-                {
-                  id: query?.id
-                },
-                {
-                  onSuccess: ( value ) => {
-                      const response  = value.data
-                        
-                      if (response) {
-                          const { result, code, status, msg } = response;
-                          if(result == 1) {
-        
-                            toast.success('Huỷ đơn hàng đơn hàng thành công!', {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            });           
-                          }
-                          else if(result == 0) {
-                            toast.error(msg, {
-                              position: "top-right",
-                              autoClose: 5000,
-                              hideProgressBar: false,
-                              closeOnClick: true,
-                              pauseOnHover: true,
-                              draggable: true,
-                              progress: undefined,
-                              theme: "light",
-                            }); 
-                          }
-                      } else {
-                        toast.error('Huỷ đơn hàng đơn hàng thất bại!', {
-                          position: "top-right",
-                          autoClose: 5000,
-                          hideProgressBar: false,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                          theme: "light",
-                        }); 
-                      }
-                  },
-                  onError: (error) => {
-                    if(error?.response?.status == 400) {
-                      if(error?.response?.data?.msg) {
-  
-                        toast.error(error?.response?.data?.msg, {
-                          position: "top-right",
-                          autoClose: 5000,
-                          hideProgressBar: false,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                          theme: "light",
-                        });
-                      }
-                    }
-                    else {
-                      toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                    }
-                      
-                  },
-                  
-                  // Always refetch after error or success:
-                  onSettled: () => {
-                    queryClient.invalidateQueries({ queryKey:[API_ENDPOINTS.ORDERS_ADMIN, query?.id?.toString()]});
-                },
+  const handleCancelOrder = () => {
+    if(!reasonCancel) {
+      toast.error('Vui lòng chọn lý do huỷ đơn hàng!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    else {
+      cancelOrder(
+        {
+          id: query?.id,
+          variables: {
+            reasonCancel
+          }
+        },
+        {
+          onSuccess: ( value ) => {
+              const response  = value.data
                 
-                }
-            )
+              if (response) {
+                  const { result, code, status, msg } = response;
+                  if(result == 1) {
+
+                    toast.success('Huỷ đơn hàng đơn hàng thành công!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                    });           
+                  }
+                  else if(result == 0) {
+                    toast.error(msg, {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                    }); 
+                  }
+              } else {
+                toast.error('Huỷ đơn hàng đơn hàng thất bại!', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                }); 
+              }
+          },
+          onError: (error) => {
+            if(error?.response?.status == 400) {
+              if(error?.response?.data?.msg) {
+
+                toast.error(error?.response?.data?.msg, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                });
+              }
+            }
+            else {
+              toast.error('Lỗi máy chủ, xin hãy thử lại sau!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
+              
+          },
+          
+          // Always refetch after error or success:
+          onSettled: () => {
+            queryClient.invalidateQueries({ queryKey:[API_ENDPOINTS.ORDERS_ADMIN, query?.id?.toString()]});
+        },
+        
         }
-    });
+      )
+      setIsModalOpenCancelOrder(false);
+    }
+   
   
   };
 
@@ -406,6 +417,10 @@ export default function OrderDetailsPage() {
       }
     )
   }
+
+  const handleChangeReasonCancel = (value) => {
+    setReasonCancel(value)
+  };
   return (
     <Card>
       
@@ -420,14 +435,28 @@ export default function OrderDetailsPage() {
           className="flex items-start justify-end gap-2 ms-auto w-full lg:w-2/4"
         >
           {
-            data?.order?.status?.id !== 4 &&  data?.order?.status?.id !== 5 &&
-            <form onSubmit={handleSubmitCancel(onSubmitCancelOrder)}>
-              <Button htmlType="submit" loading={canceling} className="flex items-center border border-accent bg-transparent text-accent  hover:!border-accent h-9 hover:!text-accent" icon={<StopOutlined />}>
-                <span className="block">
-                    Huỷ đơn hàng
-                </span>
-              </Button>
-            </form>
+            data?.order?.status?.id !== 4 &&  data?.order?.status?.id !== 5 &&<>
+            <Button onClick={() => setIsModalOpenCancelOrder(true)} loading={canceling} className="flex items-center border border-accent bg-transparent text-accent  hover:!border-accent h-9 hover:!text-accent" icon={<StopOutlined />}>
+              <span className="block">
+                  Huỷ đơn hàng
+              </span>
+            </Button>
+            <Modal title="Huỷ đơn hàng" open={isModalOpenCancelOrder} onOk={handleCancelOrder} onCancel={()=>setIsModalOpenCancelOrder(false)} destroyOnClose={true}>
+              <div className='my-2 text-sm'>Chọn lý do huỷ:</div>
+              <Select
+                className='w-full'
+                placeholder="Lý do huỷ"
+                onChange={handleChangeReasonCancel}
+                options={[
+                  { value: 1, label: 'Muốn thay đổi sản phẩm' },
+                  { value: 2, label: 'Tìm thấy chỗ mua khác tốt hơn' },
+                  { value: 3, label: 'Không có nhu cầu mua nữa' },
+                  { value: 4, label: 'Phí vận chuyển cao'},
+                  { value: 5, label: 'Khác'},
+                ]}
+              />
+            </Modal>
+            </>
             
           }
           {
