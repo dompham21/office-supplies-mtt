@@ -4,8 +4,7 @@ import com.luv2code.doan.dto.*;
 import com.luv2code.doan.entity.*;
 import com.luv2code.doan.exceptions.*;
 import com.luv2code.doan.principal.UserPrincipal;
-import com.luv2code.doan.request.CategoryRequest;
-import com.luv2code.doan.request.ChangeOrderStatusRequest;
+import com.luv2code.doan.request.OrderCancelRequest;
 import com.luv2code.doan.request.ShipperRequest;
 import com.luv2code.doan.response.*;
 import com.luv2code.doan.service.*;
@@ -14,14 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +46,9 @@ public class AdminOrderRestController {
 
     @Autowired
     private StaffService staffService;
+
+    @Autowired
+    private OrderReasonCancelService orderReasonCancelService;
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -225,10 +225,11 @@ public class AdminOrderRestController {
 
     @RequestMapping(value = "/cancel/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> cancelOrder(@PathVariable Integer id, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
+    public ResponseEntity<?> cancelOrder(@PathVariable Integer id, @RequestBody @Valid OrderCancelRequest orderCancelRequest, HttpServletRequest request) throws OrderNotFoundException, OrderStatusNotFoundException {
 
         Order order = orderService.getOrderById(id);
-        orderService.cancelOrder(order);
+        OrderReasonCancel orderReasonCancel = orderReasonCancelService.getOrderReasonCancelById(orderCancelRequest.getReasonCancel());
+        orderService.cancelOrder(order, orderReasonCancel);
 
         BaseResponse result = new BaseResponse(1, "Successfully!", request.getMethod(), new Date().getTime(),
                 HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value());

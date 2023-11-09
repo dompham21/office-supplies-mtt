@@ -272,13 +272,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order cancelOrder(Order order) {
+    public Order cancelOrder(Order order, OrderReasonCancel orderReasonCancel) {
         List<OrderDetail> orderDetailList = orderDetailRepository.getListOrderDetailByOrder(order.getId());
         for(OrderDetail od: orderDetailList) {
             Product product = od.getProduct();
             product.setInStock(product.getInStock() + od.getQuantity());
             productRepository.save(product);
         }
+        order.setReasonCancel(orderReasonCancel);
 
         order.setStatus(orderStatusRepository.getOrderStatusById(5));
 

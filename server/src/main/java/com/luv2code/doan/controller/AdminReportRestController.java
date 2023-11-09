@@ -155,6 +155,44 @@ public class AdminReportRestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/profit/between", method = RequestMethod.GET)
+    @ResponseBody
+    private ResponseEntity<?> getProfitBetween(@RequestParam(value = "fromDate", required = true) String pFromDate,
+                                                @RequestParam(value = "toDate", required = true) String pToDate, HttpServletRequest request) throws NotFoundException, IOException {
+        Date fromDate = null;
+        Date toDate = null;
+
+        List<Double> data = new ArrayList<>();
+        List<String> label = new ArrayList<>();
+        if(!pFromDate.trim().isEmpty()) {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                fromDate = setToMidnight(format.parse(pFromDate));
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+                throw new NotFoundException("Lỗi định dạng datetime!");
+            }
+        }
+        if(!pToDate.trim().isEmpty()) {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                toDate = setToLastMinute(format.parse(pToDate));
+            } catch (ParseException e) {
+                throw new NotFoundException("Lỗi định dạng datetime!");
+            }
+        }
+
+        List<RevenueYearItem> list = reportService.getProfitBetweenTwoDate(fromDate, toDate);
+
+        RevenueReportResponse result = new RevenueReportResponse(1, "Get profit successfully!",
+                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                list
+        );
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/order", method = RequestMethod.GET)
     @ResponseBody
@@ -284,7 +322,7 @@ public class AdminReportRestController {
         List<SoldByCategoryItem> list = reportService.getSoldByCategory();
 
 
-        List<Double> data = new ArrayList<>();
+        List<Integer> data = new ArrayList<>();
         List<String> label = new ArrayList<>();
 
         for (SoldByCategoryItem item : list) {
@@ -292,9 +330,60 @@ public class AdminReportRestController {
             label.add(item.getName());
         }
 
-        SaleHistoryResponse result = new SaleHistoryResponse(1, "Get sold by category successfully!",
+        SaleCategoryResponse result = new SaleCategoryResponse(1, "Get sold by category successfully!",
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
                 data, label
+        );
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/order-cancel", method = RequestMethod.GET)
+    @ResponseBody
+    private ResponseEntity<?> orderCancelOverview(@RequestParam(value = "type", required = false) Optional<Integer> pType, HttpServletRequest request) throws OrderStatusNotFoundException {
+
+        int type = 0; // Type = 0 is Year, 1 is Month, 2 is Week
+
+        if (pType.isPresent()) {
+            if(pType.get() == 0 || pType.get() == 1 || pType.get() == 2) {
+                type = pType.get();
+            }
+        }
+
+        List<ReportItem> list =  reportService.reportOrderCancel(type);
+
+
+        List<Long> data = new ArrayList<>();
+        List<String> label = new ArrayList<>();
+
+        for (ReportItem item : list) {
+            data.add(item.getValue());
+            label.add(item.getName());
+        }
+
+
+        long totalOrder = 0;
+        long totalOrderCancel = 0;
+        switch (type){
+            case 0: { // year
+                totalOrderCancel = reportService.countOrderByYearAndStatusId(5);
+                totalOrder = reportService.countOrderByYear();
+                break;
+            }
+            case 1: { //month
+                totalOrderCancel = reportService.countOrderByMonthAndStatusId(5);
+                totalOrder = reportService.countOrderByMonth();
+                break;
+            }
+            case 2: { //week
+                totalOrderCancel = reportService.countOrderByWeekAndStatusId(5);
+                totalOrder = reportService.countOrderByWeek();
+                break;
+            }
+        }
+
+        OrderCancelReportResponse result = new OrderCancelReportResponse(1, "Get order cancel overview successfully!",
+                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
+                data, label, totalOrder, totalOrderCancel
         );
         return new ResponseEntity(result, HttpStatus.OK);
     }

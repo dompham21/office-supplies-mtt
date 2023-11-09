@@ -12,6 +12,8 @@ import SoldCategoryChart from './widget/sold-category-chart'
 import StickerCard from './widget/sticker-card'
 import UserActivityChart from './widget/user-activity-chart'
 import RevenueChart from './widget/revenue-chart'
+import OrderCancelChart from './widget/order-cancel-chart'
+import ProfitChart from './widget/profit-chart'
 
 function AdminDashboard() {
 
@@ -63,6 +65,9 @@ function AdminDashboard() {
       <div className='w-full flex flex-col  flex-wrap mb-6'>
         <RevenueChart/>
       </div>
+      <div className='w-full flex flex-col  flex-wrap mb-6'>
+        <ProfitChart/>
+      </div>
       <div className="w-full flex flex-col flex-wrap mb-6">
         <SaleHistory/>
       </div>
@@ -71,8 +76,14 @@ function AdminDashboard() {
           <OrderStatusChart/>
         </div>
         <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
-          {/* <SoldCategoryChart/> */}
+          <OrderCancelChart/>
         </div>
+      </div>
+      <div className="w-full flex flex-wrap mb-6">
+        <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
+          <SoldCategoryChart/>
+        </div>
+       
       </div>
     </>
   )
