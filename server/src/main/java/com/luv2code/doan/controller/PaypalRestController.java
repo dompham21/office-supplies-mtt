@@ -69,7 +69,7 @@ public class PaypalRestController {
 
 
     @RequestMapping(value = "/payment", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createPayment(@RequestBody CheckoutRequest checkoutRequest, Authentication authentication, HttpServletRequest request) throws PayPalRESTException, NotFoundException, ProductNotFoundException, CartMoreThanProductInStock {
+    public ResponseEntity<?> createPayment(@RequestBody CheckoutRequest checkoutRequest, Authentication authentication, HttpServletRequest request) throws PayPalRESTException, NotFoundException, ProductNotFoundException, CartMoreThanProductInStock, OrderStatusNotFoundException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Customer customer = customerService.getCustomerByEmail(userPrincipal.getEmail());
@@ -97,8 +97,10 @@ public class PaypalRestController {
 
         for(Links link:payment.getLinks()) {
             if(link.getRel().equals("approval_url")) {
-                orderService.createOrder(customer, listCart, checkoutRequest.getAddress(), checkoutRequest.getName(), checkoutRequest.getPhone(), payment.getId());
+                Order order = orderService.createOrder(customer, listCart, checkoutRequest.getAddress(), checkoutRequest.getName(), checkoutRequest.getPhone(), payment.getId());
                 cartService.deleteCartItemByUser(customer.getId(), listProductIds);
+
+                orderService.executeOrder(order);
 
                 MakePaymentResponse result = new MakePaymentResponse(1, "Your account has been created successfully!",
                         request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
@@ -179,8 +181,4 @@ public class PaypalRestController {
         }
         throw new NotFoundException("Cố lỗi xảy ra, hãy thử lại sau!");
     }
-
-
-
-
 }

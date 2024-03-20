@@ -317,8 +317,8 @@ export default function Checkout() {
                       progress: undefined,
                       theme: "light",
                     });
-                    window.open(response.data, "_self");
-
+                    // window.open(response.data, "_self");
+                    router.push(`/user/order/`) 
                     sessionStorage.removeItem(CHECKED_LIST)
                   }
                   else if(result == 0) {

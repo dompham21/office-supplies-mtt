@@ -268,6 +268,8 @@ public class ProductRestController {
 
         for(Product p : listProduct) {
             int soldQuantity = productService.getSoldQuantity(p.getId());
+            log.info("sold" + String.valueOf(soldQuantity));
+
             if(soldQuantity > 0) {
                 List<String> listImage = productService.getListImagesStringByProduct(p.getId());
 
