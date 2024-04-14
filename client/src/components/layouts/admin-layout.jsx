@@ -22,11 +22,6 @@ const AdminLayout = ({ children }) => {
     const router = useRouter()
     const sidebarLinks = [
         {
-            href: ROUTES.ADMIN_PRODUCT,
-            label: "Sản phẩm",
-            icon:  <ProductIcons/>
-        },
-        {
             href: ROUTES.ADMIN_CUSTOMER,
             label: "Khách hàng",
             icon:  <UserIcons/>
@@ -37,46 +32,21 @@ const AdminLayout = ({ children }) => {
             icon:  <UserIcons/>
         },
         {
+            href: ROUTES.ADMIN_SELLER,
+            label: "Seller",
+            icon:  <BrandIcons/>
+        },
+        {
             href: ROUTES.ADMIN_CATEGORY,
             label: "Danh mục",
             icon:  <CategoryIcons/>
         },
-        {
-            href: ROUTES.ADMIN_BRAND,
-            label: "Thương hiệu",
-            icon:  <BrandIcons/>
-        },
-        {
-            href: ROUTES.ADMIN_ORDER,
-            label: "Đơn đặt hàng",
-            icon:  <OrderIcons/>
-        },
+        
         {
             href: ROUTES.ADMIN_POSTER,
             label: "Poster",
             icon:  <PosterIcons/>
         },
-        {
-            href: ROUTES.ADMIN_IMPORT,
-            label: "Phiếu nhập",
-            icon:  <ImportProductIcons/>
-        },
-        {
-            href: ROUTES.ADMIN_PURCHASE,
-            label: "Phiếu đặt",
-            icon:  <ImportProductIcons/>
-        },
-        
-        {
-            href: ROUTES.ADMIN_PROMOTION,
-            label: "Đợt khuyến mãi",
-            icon:  <CouponIcons/>
-        },
-        {
-            href: ROUTES.ADMIN_SUPPLIER,
-            label: "Nhà cung cấp",
-            icon:  <TaxesIcon/>
-        }
     ]
 
     const SidebarItemMap = () => (

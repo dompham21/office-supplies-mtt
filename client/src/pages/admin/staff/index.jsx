@@ -22,6 +22,7 @@ import { Button } from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import removeVietnameseDiacritics from '@utils/format-text';
 
  
 const AdminStaffPage = () => {

@@ -50,5 +50,4 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Collection<Order> orders;
-
 }

@@ -26,7 +26,7 @@ public class PromotionDto {
         this.startDate = promotion.getStartAt();
         this.finishDate = promotion.getEndAt();
         this.reason = promotion.getReason();
-        this.staff = promotion.getStaff().getName();
+//        this.staff = promotion.getStaff().getName();
     }
 
     public PromotionDto(Promotion promotion, List<PromotionDetailDto> promotionDetails) {

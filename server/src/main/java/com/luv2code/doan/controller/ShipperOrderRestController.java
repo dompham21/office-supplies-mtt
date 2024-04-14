@@ -139,15 +139,15 @@ public class ShipperOrderRestController {
             List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
             for(OrderDetail orderDetail : listOrderDetail) {
-                Product product = orderDetail.getProduct();
-                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId()))
-                        );
-                listOrderDetailDto.add(orderDetailDto);
+//                Product product = orderDetail.getProduct();
+//                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                        new ProductDto(product,
+//                                promotionService.getCurrentPromotionByProduct(product),
+//                                priceHistoryService.getPriceFromProductId(product.getId()),
+//                                productService.getSoldQuantity(product.getId()),
+//                                productService.getListImagesStringByProduct(product.getId()))
+//                        );
+//                listOrderDetailDto.add(orderDetailDto);
             }
             orderDto.setOrderDetails(listOrderDetailDto);
 
@@ -191,15 +191,15 @@ public class ShipperOrderRestController {
         List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
         for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product,
-                            promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId()))
-                    );
-            listOrderDetailDto.add(orderDetailDto);
+//            Product product = orderDetail.getProduct();
+//            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                    new ProductDto(product,
+//                            promotionService.getCurrentPromotionByProduct(product),
+//                            priceHistoryService.getPriceFromProductId(product.getId()),
+//                            productService.getSoldQuantity(product.getId()),
+//                            productService.getListImagesStringByProduct(product.getId()))
+//                    );
+//            listOrderDetailDto.add(orderDetailDto);
         }
         orderDto.setOrderDetails(listOrderDetailDto);
 

@@ -8,6 +8,7 @@ import com.luv2code.doan.entity.*;
 import com.luv2code.doan.exceptions.DuplicateException;
 import com.luv2code.doan.exceptions.NotFoundException;
 import com.luv2code.doan.request.SignupAdminRequestBody;
+import com.luv2code.doan.request.StaffRequest;
 import com.luv2code.doan.response.*;
 import com.luv2code.doan.service.AccountService;
 import com.luv2code.doan.service.RoleService;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +43,7 @@ public class AdminStaffRestController {
     private RoleService roleService;
     @Autowired
     private  PasswordEncoder passwordEncoder;
+    private final String defaultAvatar = "https://res.cloudinary.com/dmriwkfll/image/upload/v1656155271/f0w0qgwpe8wxo1ceafhm.jpg";
 
 
     @RequestMapping(value = "/shipper", method = RequestMethod.GET)
@@ -75,27 +78,15 @@ public class AdminStaffRestController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody @Valid SignupAdminRequestBody body, @PathVariable String id, HttpServletRequest request) throws DuplicateException, NotFoundException {
+    public ResponseEntity<?> update(@RequestBody @Valid StaffRequest body, @PathVariable String id, HttpServletRequest request) throws DuplicateException, NotFoundException {
         Staff staff = staffService.getStaffById(id);
-
         Account account = accountService.getAccountByEmail(staff.getAccount().getEmail());
-        String hashPass = passwordEncoder.encode(body.getPassword());
-        account.setPassword(hashPass);
+
         account.setIsActive(body.getIsActive());
 
-        Role roleAdmin = roleService.getRoleByName("ADMIN");
-
-        // Just set role admin or sale for staff
-        if(body.getRoleId().equals(roleAdmin.getId())) {
-            Role role = roleService.getRoleByID(body.getRoleId());
-            account.setRole(role);
-        }
-
-        staff.setAvatar(body.getAvatar());
         staff.setName(body.getName());
         staff.setAddress(body.getAddress());
         staff.setGender(body.getGender());
-        staff.setId(body.getId());
         staff.setPhone(body.getPhone());
 
         Staff staffAfterSave = staffService.saveStaff(staff);
@@ -212,5 +203,37 @@ public class AdminStaffRestController {
         StaffResponse result = new StaffResponse(1, "Get user successfully!", request.getMethod(), new Date().getTime(),
                 HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), userDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> addSupplier(@Valid @RequestBody StaffRequest body, HttpServletRequest request) throws NotFoundException {
+        Account account = new Account();
+        String hashPass = passwordEncoder.encode(body.getPassword());
+
+        account.setEmail(body.getEmail());
+        account.setPassword(hashPass);
+        Role role = roleService.getRoleByName("ADMIN");
+        account.setRole(role);
+        account.setIsActive(true);
+
+        Account accountAfterSave = accountService.saveAccount(account);
+
+        Staff staff = new Staff();
+        staff.setName(body.getName());
+        staff.setAddress(body.getAddress());
+        staff.setGender(body.getGender());
+        staff.setPhone(body.getPhone());
+        staff.setAccount(accountAfterSave);
+        staff.setAvatar(defaultAvatar);
+        staff.setRegistrationDate(new Date());
+
+        Staff saveStaff = staffService.saveStaff(staff);
+
+        StaffDto staffDto = new StaffDto(saveStaff);
+
+        StaffResponse result = new StaffResponse(1, "Add staff successfully!", request.getMethod(), new Date().getTime(),
+                HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(), staffDto);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 }

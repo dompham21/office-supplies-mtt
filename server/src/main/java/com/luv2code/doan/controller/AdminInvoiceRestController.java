@@ -70,14 +70,14 @@ public class AdminInvoiceRestController {
         List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
         for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
+//            Product product = orderDetail.getProduct();
 
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product, promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId())));
-            listOrderDetailDto.add(orderDetailDto);
+//            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                    new ProductDto(product, promotionService.getCurrentPromotionByProduct(product),
+//                            priceHistoryService.getPriceFromProductId(product.getId()),
+//                            productService.getSoldQuantity(product.getId()),
+//                            productService.getListImagesStringByProduct(product.getId())));
+//            listOrderDetailDto.add(orderDetailDto);
         }
 
         InvoiceDto invoiceDto = new InvoiceDto(invoice, orderService.getTotalByOrder(order), listOrderDetailDto);
@@ -108,7 +108,7 @@ public class AdminInvoiceRestController {
         Invoice invoice = new Invoice();
         invoice.setName(body.getName().trim());
         invoice.setDate(new Date());
-        invoice.setStaff(staff);
+//        invoice.setStaff(staff);
         invoice.setId(body.getId().trim().toUpperCase());
         invoice.setTaxCode(body.getTaxCode().trim().toUpperCase());
         invoice.setOrder(order);

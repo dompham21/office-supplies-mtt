@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "invoice")
 public class Invoice {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", length = 10)
     private String id;
 
@@ -27,11 +28,11 @@ public class Invoice {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name="staff_id")
-    private Staff staff;
+    @JoinColumn(name="seller_id")
+    private Seller seller;
 
     @OneToOne
-    @JoinColumn(name="the_order_id")
+    @JoinColumn(name="order_id")
     private Order order;
 
     @Nationalized

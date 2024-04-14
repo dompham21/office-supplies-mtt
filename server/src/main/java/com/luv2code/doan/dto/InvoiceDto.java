@@ -26,6 +26,6 @@ public class InvoiceDto {
         this.name = invoice.getName();
         this.taxCode = invoice.getTaxCode();
         this.order = new OrderDto(invoice.getOrder(), total, orderDetailDtoList);
-        this.staff = new StaffDto(invoice.getStaff());
+//        this.staff = new StaffDto(invoice.getStaff());
     }
 }

@@ -35,12 +35,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query("SELECT p FROM Product  p WHERE p.isActive <> FALSE")
     public Page<Product> findBestSellProduct(Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.isActive <> FALSE " +
-            "AND ((:catId = 'all' AND p.categories.id is not null ) OR (:catId <> 'all' AND p.categories.id = :catId))" +
-            "AND ((:brandId = 'all' AND p.brands.id is not null ) OR (:brandId <> 'all' AND p.brands.id = :brandId))")
-    public Page<Product> searchFilterProduct(String catId, String brandId, Pageable pageable);
-
-
     @Query("SELECT p FROM Product p WHERE (p.name LIKE %:keyword%) " +
             "AND p.isActive <> FALSE " +
             "AND p.categories.id in :catIds")
@@ -50,7 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             "AND p.isActive <> FALSE")
     public Page<Product> searchWithKeywordFilterProduct(String keyword, Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE (p.name LIKE %:keyword% OR p.categories.name LIKE %:keyword%  OR p.brands.name LIKE %:keyword% )")
+    @Query("SELECT p FROM Product p WHERE (p.name LIKE %:keyword% OR p.categories.name LIKE %:keyword%)")
     public Page<Product> getListProductsAdminWithKeyword(String keyword, Pageable pageable);
 
     @Query("SELECT p FROM Product p")

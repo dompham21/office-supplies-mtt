@@ -192,9 +192,6 @@ function ProfileUpdateInfoForm({initialValues, loading}) {
     const { data: districtDetail } = useDistrictsDetailQuery(district);
     const { data: wardDetail } = useWardsDetailQuery(ward);
 
-
-  
-
     const {
         register,
         handleSubmit,

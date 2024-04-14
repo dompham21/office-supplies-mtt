@@ -13,13 +13,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @IdClass(OrderDetailKey.class)
-@Table(name = "the_order_detail")
+@Table(name = "order_detail")
 public class OrderDetail {
     @Column(name = "quantity")
     private Integer quantity;
-
-    @Column(name = "quantity_return")
-    private Integer quantityReturn;
 
     @Column(name = "unit_price")
     private Float unitPrice;
@@ -31,10 +28,6 @@ public class OrderDetail {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "return_id")
-    private ReturnProduct returnProduct;
+    @JoinColumn(name = "variant_id")
+    private ProductVariant product;
 }

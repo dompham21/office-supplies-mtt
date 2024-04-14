@@ -16,5 +16,7 @@ public class OTPRequest {
     @NotNull(message = "OTP must not be null!")
     private int otp;
 
-
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Email must be a well-formed email address")
+    private String username;
 }

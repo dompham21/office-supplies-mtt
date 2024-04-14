@@ -1,6 +1,5 @@
 package com.luv2code.doan.response;
 
-import com.luv2code.doan.dto.BrandDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

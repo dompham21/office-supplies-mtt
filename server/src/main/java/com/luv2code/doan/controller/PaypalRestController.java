@@ -78,10 +78,8 @@ public class PaypalRestController {
         List<Cart> listCart = new ArrayList<>();
         List<String> listProductIds = new ArrayList<>();
 
-        for(CartDto cartDto : checkoutRequest.getCarts()) {
+        for (CartDto cartDto : checkoutRequest.getCarts()) {
             Product productInCart = productService.getProductById(cartDto.getProduct().getId());
-            log.info("product: " + productInCart.getName());
-            log.info("quanitty: " + productInCart.getInStock());
 
             listCart.add(new Cart(cartDto.getId(), productInCart, customer, cartDto.getQuantity()));
             listProductIds.add(cartDto.getProduct().getId());
@@ -90,13 +88,12 @@ public class PaypalRestController {
         double total = orderService.getTotal(listCart);
 
 
-
         Payment payment = paypalService.createPayment(convertVNDToUSD(total), "USD", "paypal",
                 "sale", "test", CANCEL_URL,
-                 SUCCESS_URL);
+                SUCCESS_URL);
 
-        for(Links link:payment.getLinks()) {
-            if(link.getRel().equals("approval_url")) {
+        for (Links link : payment.getLinks()) {
+            if (link.getRel().equals("approval_url")) {
                 Order order = orderService.createOrder(customer, listCart, checkoutRequest.getAddress(), checkoutRequest.getName(), checkoutRequest.getPhone(), payment.getId());
                 cartService.deleteCartItemByUser(customer.getId(), listProductIds);
 
@@ -111,36 +108,6 @@ public class PaypalRestController {
 
         }
         throw new NotFoundException("Tạo đơn hàng thất bại, hãy thử lại sau!");
-    }
-
-    @RequestMapping(value = "/payment/execute", method = RequestMethod.GET)
-    public ResponseEntity<?> successPay(HttpServletRequest request, @RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws NotFoundException, OrderStatusNotFoundException {
-        try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-
-            if (payment.getState().equals("approved")) {
-                log.info("success");
-
-                Order order = orderService.findOrderByPaymentId(paymentId);
-                orderService.executeOrder(order);
-
-
-                MakePaymentResponse result = new MakePaymentResponse(1, "Your account has been created successfully!",
-                        request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                        "success");
-
-                return new ResponseEntity(result, HttpStatus.OK);
-            }
-        } catch (PayPalRESTException e) {
-            throw new NotFoundException("Thanh toán đơn hàng thất bại, hãy thử lại sau!");
-        }
-        catch (CartMoreThanProductInStock | OrderStatusNotFoundException ex) {
-            throw new NotFoundException(ex.getMessage());
-        }
-
-
-
-        throw new NotFoundException("Thanh toán đơn hàng thất bại, hãy thử lại sau!");
     }
 
     private double convertVNDToUSD(double vndAmount) {
@@ -168,7 +135,6 @@ public class PaypalRestController {
 
         for(Links link:payment.getLinks()) {
             if(link.getRel().equals("approval_url")) {
-                order.setPaymentId(payment.getId());
                 orderService.saveOrder(order);
 
                 MakePaymentResponse result = new MakePaymentResponse(1, "Your account has been created successfully!",

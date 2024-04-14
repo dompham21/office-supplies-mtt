@@ -58,7 +58,6 @@ public class OrderServiceImpl implements OrderService {
         Order newOrder = new Order();
         newOrder.setAddress(address);
         newOrder.setDate(new Date());
-        newOrder.setPaymentId(paymentId);
         newOrder.setCustomer(customer);
         newOrder.setName(name);
         newOrder.setPhone(phone);
@@ -69,13 +68,13 @@ public class OrderServiceImpl implements OrderService {
             Product productCart = cart.getProduct();
             Product product = productRepository.getProductById(productCart.getId());
 
-            if(cart.getQuantity() > product.getInStock()) {
-                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
-            }
+//            if(cart.getQuantity() > product.getInStock()) {
+//                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
+//            }
 
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrder(newOrder);
-            orderDetail.setProduct(product);
+//            orderDetail.setProduct(product);
             orderDetail.setQuantity(cart.getQuantity());
             int promotionPercentage = promotionService.getCurrentPromotionByProduct(product);
             float price = priceHistoryService.getPriceFromProductId(product.getId());
@@ -98,13 +97,13 @@ public class OrderServiceImpl implements OrderService {
     public Order executeOrder(Order order) throws OrderStatusNotFoundException, CartMoreThanProductInStock {
         List<OrderDetail> orderDetailSet = order.getOrderDetails();
         for (OrderDetail od : orderDetailSet) {
-            Product productCart = od.getProduct();
-            Product product = productRepository.getProductById(productCart.getId());
-            if(od.getQuantity() > product.getInStock()) {
-                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
-            }
-            product.setInStock(product.getInStock() - od.getQuantity());
-            productRepository.save(product);
+//            Product productCart = od.getProduct();
+//            Product product = productRepository.getProductById(productCart.getId());
+//            if(od.getQuantity() > product.getInStock()) {
+//                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
+//            }
+//            product.setInStock(product.getInStock() - od.getQuantity());
+//            productRepository.save(product);
         }
 
         order.setStatus(orderStatusService.getOrderStatusById(2));
@@ -149,9 +148,9 @@ public class OrderServiceImpl implements OrderService {
 
             for(OrderDetail item : orderDetail)
             {
-                Product product = item.getProduct();
+//                Product product = item.getProduct();
 //                product.setSoldQuantity(product.getSoldQuantity() + item.getQuantity());
-                productRepository.save(product);
+//                productRepository.save(product);
             }
         }
         else if(statusId == 5) { //cancel
@@ -161,9 +160,9 @@ public class OrderServiceImpl implements OrderService {
 
             for(OrderDetail item : orderDetail)
             {
-                Product product = item.getProduct();
+//                Product product = item.getProduct();
 //                product.setInStock(product.getSoldQuantity() + item.getQuantity());
-                productRepository.save(product);
+//                productRepository.save(product);
             }
         }
         order.setStatus(orderStatusRepository.getOrderStatusById(statusId));
@@ -271,22 +270,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
-    public Order cancelOrder(Order order, OrderReasonCancel orderReasonCancel) {
-        List<OrderDetail> orderDetailList = orderDetailRepository.getListOrderDetailByOrder(order.getId());
-        for(OrderDetail od: orderDetailList) {
-            Product product = od.getProduct();
-            product.setInStock(product.getInStock() + od.getQuantity());
-            productRepository.save(product);
-        }
-        order.setReasonCancel(orderReasonCancel);
-
-        order.setStatus(orderStatusRepository.getOrderStatusById(5));
-
-        return orderRepository.save(order);
-    }
-
-    @Override
     public boolean checkOrderDeliveryByShipper(String staffId, Integer orderId) {
         // Get the order by id
         Order order = orderRepository.findById(orderId).orElse(null);
@@ -304,9 +287,5 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.getOrderByUserAndStatusBetweenDate(userId, statusId, fromDate, toDate, pageable);
         }
         return orderRepository.getOrderByUserAndStatus(userId, statusId, pageable);
-    }
-
-    public Order findOrderByPaymentId(String paymentId) {
-        return orderRepository.findOrderByPaymentId(paymentId);
     }
 }

@@ -81,7 +81,7 @@ public class AdminPromotionRestController {
         promotion.setId(body.getId());
         promotion.setStartAt(endDate);
         promotion.setEndAt(endDate);
-        promotion.setStaff(staff);
+//        promotion.setSeller(staff);
         promotion.setReason(body.getReason());
 
         List<PromotionDetail> promotionDetails = promotion.getPromotionDetails();
@@ -148,7 +148,7 @@ public class AdminPromotionRestController {
         promotion.setReason(body.getReason());
         promotion.setStartAt(fromDate);
         promotion.setEndAt(endDate);
-        promotion.setStaff(staff);
+//        promotion.setStaff(staff);
         promotion.setId(body.getId());
 
         promotionDetailService.deletePromotionDetailByPromotionId(promotion.getId());

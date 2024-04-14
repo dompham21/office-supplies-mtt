@@ -17,6 +17,7 @@ import java.util.Date;
 @Table(name="staff")
 public class Staff {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", length = 10)
     private String id;
 
@@ -47,7 +48,4 @@ public class Staff {
 
     @OneToMany(mappedBy = "staffDelivery", fetch = FetchType.LAZY)
     private Collection<Order> ordersDelivery;
-
-    @OneToMany(mappedBy = "staffApprove", fetch = FetchType.LAZY)
-    private Collection<Order> ordersApprove;
 }

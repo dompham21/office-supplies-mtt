@@ -64,11 +64,6 @@ public class OrderRestController {
     @Autowired
     private ReviewService reviewService;
 
-    @Autowired
-    private OrderReasonCancelService orderReasonCancelService;
-
-
-
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
@@ -143,13 +138,13 @@ public class OrderRestController {
             List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
             for(OrderDetail orderDetail : listOrderDetail) {
-                Product product = orderDetail.getProduct();
-                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                        new ProductDto(product, promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId())));
-                listOrderDetailDto.add(orderDetailDto);
+//                Product product = orderDetail.getProduct();
+//                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                        new ProductDto(product, promotionService.getCurrentPromotionByProduct(product),
+//                                priceHistoryService.getPriceFromProductId(product.getId()),
+//                                productService.getSoldQuantity(product.getId()),
+//                                productService.getListImagesStringByProduct(product.getId())));
+//                listOrderDetailDto.add(orderDetailDto);
             }
             orderDto.setOrderDetails(listOrderDetailDto);
 
@@ -176,23 +171,23 @@ public class OrderRestController {
 
         for(OrderDetail od : order.getOrderDetails()) {
             Review review = reviewService.getReviewByUserIdAndProductId(customer.getId(), od.getProduct().getId());
-            Product product = od.getProduct();
-            if(review != null) {
-                orderDetailsDto.add(new OrderDetailDto(od,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId())), true));
-            }
-            else {
-                orderDetailsDto.add(new OrderDetailDto(od,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId())), false));
-            }
+//            Product product = od.getProduct();
+//            if(review != null) {
+//                orderDetailsDto.add(new OrderDetailDto(od,
+//                        new ProductDto(product,
+//                                promotionService.getCurrentPromotionByProduct(product),
+//                                priceHistoryService.getPriceFromProductId(product.getId()),
+//                                productService.getSoldQuantity(product.getId()),
+//                                productService.getListImagesStringByProduct(product.getId())), true));
+//            }
+//            else {
+//                orderDetailsDto.add(new OrderDetailDto(od,
+//                        new ProductDto(product,
+//                                promotionService.getCurrentPromotionByProduct(product),
+//                                priceHistoryService.getPriceFromProductId(product.getId()),
+//                                productService.getSoldQuantity(product.getId()),
+//                                productService.getListImagesStringByProduct(product.getId())), false));
+//            }
 
         }
         double total =  orderService.getTotalByOrder(order);
@@ -202,14 +197,14 @@ public class OrderRestController {
         List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
         for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product,
-                            promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId())));
-            listOrderDetailDto.add(orderDetailDto);
+//            Product product = orderDetail.getProduct();
+//            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                    new ProductDto(product,
+//                            promotionService.getCurrentPromotionByProduct(product),
+//                            priceHistoryService.getPriceFromProductId(product.getId()),
+//                            productService.getSoldQuantity(product.getId()),
+//                            productService.getListImagesStringByProduct(product.getId())));
+//            listOrderDetailDto.add(orderDetailDto);
         }
         orderDto.setOrderDetails(listOrderDetailDto);
 
@@ -218,72 +213,6 @@ public class OrderRestController {
                 request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
                 orderDto
         );
-        return new ResponseEntity(result, HttpStatus.OK);
-    }
-
-
-    @RequestMapping(value = "/request-cancel/{id}", method = RequestMethod.PUT)
-    @ResponseBody
-    private ResponseEntity<?> requestCancel(@PathVariable("id") Integer id, @RequestBody @Valid OrderCancelRequest orderCancelRequest, Authentication authentication, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Customer customer = customerService.getCustomerByEmail(userPrincipal.getEmail());
-        Order order = orderService.getOrder(id, customer);
-
-        int orderStatusId = order.getStatus().getId();
-        if(orderStatusId != 1) {
-            throw new NotFoundException("Trạng thái hiện tại của đơn đặt hàng không thể yêu cầu huỷ!");
-        }
-        OrderReasonCancel orderReasonCancel = orderReasonCancelService.getOrderReasonCancelById(orderCancelRequest.getReasonCancel());
-
-        orderService.cancelOrder(order, orderReasonCancel);
-
-        List<OrderDetailDto> orderDetailsDto = new ArrayList<>();
-
-        for(OrderDetail od : order.getOrderDetails()) {
-            Review review = reviewService.getReviewByUserIdAndProductId(customer.getId(), od.getProduct().getId());
-            Product product = od.getProduct();
-            if(review != null) {
-                orderDetailsDto.add(new OrderDetailDto(od,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId())), true));
-            }
-            else {
-                orderDetailsDto.add(new OrderDetailDto(od,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId())), false));
-            }
-
-        }
-        double total =  orderService.getTotalByOrder(order);
-
-        OrderDto orderDto = new OrderDto(order, total);
-        List<OrderDetailDto> listOrderDetailDto = new ArrayList<>();
-        List<OrderDetail> listOrderDetail = order.getOrderDetails();
-
-        for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product,
-                            promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId())));
-            listOrderDetailDto.add(orderDetailDto);
-        }
-        orderDto.setOrderDetails(listOrderDetailDto);
-
-
-        OrderResponse result = new OrderResponse(1, "Get list order detail successfully!",
-                request.getMethod(), new Date().getTime(), HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(),
-                orderDto
-        );
-
         return new ResponseEntity(result, HttpStatus.OK);
     }
 

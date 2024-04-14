@@ -1,18 +1,14 @@
 package com.luv2code.doan.service.impl;
 
 import com.luv2code.doan.bean.*;
-import com.luv2code.doan.entity.Order;
-import com.luv2code.doan.entity.OrderReasonCancel;
 import com.luv2code.doan.entity.OrderStatus;
 import com.luv2code.doan.exceptions.OrderStatusNotFoundException;
 import com.luv2code.doan.repository.ReportRepository;
-import com.luv2code.doan.service.OrderReasonCancelService;
 import com.luv2code.doan.service.OrderStatusService;
 import com.luv2code.doan.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,9 +26,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderStatusService orderStatusService;
-
-    @Autowired
-    private OrderReasonCancelService orderReasonCancelService;
 
     public long getTotalReviewInMonth() {
         Date currentDate = new Date();
@@ -221,37 +214,6 @@ public class ReportServiceImpl implements ReportService {
                 }
                 case 2: { //week
                     item.setValue(countOrderByWeekAndStatusId(os.getId()));
-                    break;
-                }
-            }
-
-            list.add(item);
-        }
-
-        return list;
-    }
-
-    public List<ReportItem> reportOrderCancel(Integer type) {
-
-        List<ReportItem> list = new ArrayList<>();
-
-
-        List<OrderReasonCancel> listOrderStatus = orderReasonCancelService.listOrderReasonCancel();
-
-        for(OrderReasonCancel reason : listOrderStatus) {
-            ReportItem item = new ReportItem();
-            item.setName(reason.getName());
-            switch (type){
-                case 0: { // year
-                    item.setValue(countOrderCancelByYearAndReason(reason.getId()));
-                    break;
-                }
-                case 1: { //month
-                    item.setValue(countOrderCancelByMonthAndReason(reason.getId()));
-                    break;
-                }
-                case 2: { //week
-                    item.setValue(countOrderCancelByWeekAndReason(reason.getId()));
                     break;
                 }
             }

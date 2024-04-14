@@ -21,8 +21,8 @@ public class PriceHistory {
 
     @Id
     @ManyToOne
-    @JoinColumn(name="staff_id")
-    private Staff staff;
+    @JoinColumn(name="seller_id")
+    private Seller seller;
 
     @Id
     @ManyToOne

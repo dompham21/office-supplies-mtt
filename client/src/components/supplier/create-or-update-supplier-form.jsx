@@ -17,7 +17,7 @@ import { API_ENDPOINTS } from "@utils/api/endpoints";
 import Alert from "@components/ui/alert";
 import { toast } from "react-toastify";
 import { useUpdateSupplierMutation } from "@data/supplier/admin/use-update-supplier.mutation";
-import { useCreateSupplierMutation } from "@data/supplier/admin/use-create-supplier.mutation";
+import { useCreateSupplierMutation } from "@data/staff/use-create-staff.mutation";
 
 const supplierValidationSchema = yup.object().shape({
   id: yup.string().required("Vui lòng nhập mã nhà cung cấp").max(10, "Mã nhà cung cấp không quá 10 ký tự"),

@@ -34,9 +34,6 @@ public class ProductServiceImpl implements ProductService {
     private ImageProductRepository imageProductRepository;
 
     @Autowired
-    private BrandService brandService;
-
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -44,10 +41,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private PriceHistoryService priceHistoryService;
-
-    @Autowired
-    private SupplierService supplierService;
-
 
 
     public Product getProductByName(String name) {
@@ -65,16 +58,13 @@ public class ProductServiceImpl implements ProductService {
         if(!(product.getName().equals(body.getName())) && this.existsByName(body.getName())) {
             throw new DuplicateException("Tên sản phẩm không được trùng!");
         }
-        Brand brand = brandService.getBrandById(body.getBrandId());
         Category category = categoryService.getCategoryById(body.getCategoryId());
-        Supplier supplier = supplierService.getSupplierById(body.getSupplierId());
 
         product.setIsActive(body.getActive());
         product.setName(body.getName());
         product.setDescription(body.getDescription());
-        product.setBrands(brand);
         product.setCategories(category);
-        product.setSuppliers(supplier);
+//        product.setSuppliers(supplier);
 
         Product productAfterSave = this.saveProduct(product);
 
@@ -101,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
         PriceHistory priceHistory = new PriceHistory();
         priceHistory.setPrice(body.getPrice());
-        priceHistory.setStaff(staff);
+//        priceHistory.setStaff(staff);
         priceHistory.setApplyDate(new Date());
         priceHistory.setCreateDate(new Date());
         priceHistory.setProduct(productAfterSave);
@@ -114,11 +104,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product addProduct(ProductRequest body, Staff staff) throws DuplicateException, BrandNotFoundException, CategoryNotFoundException, SupplierNotFoundException {
-        Brand brand = brandService.getBrandById(body.getBrandId());
         Category category = categoryService.getCategoryById(body.getCategoryId());
-        Supplier supplier = supplierService.getSupplierById(body.getSupplierId());
-
-
 
         if(this.existsById(body.getId().trim())) {
             throw new DuplicateException("Mã sản phẩm không được trùng");
@@ -133,9 +119,7 @@ public class ProductServiceImpl implements ProductService {
         product.setIsActive(body.getActive());
         product.setName(body.getName());
         product.setDescription(body.getDescription());
-        product.setInStock(0);
-        product.setSuppliers(supplier);
-        product.setBrands(brand);
+//        product.setSuppliers(supplier);
         product.setCategories(category);
         product.setRegistrationDate(new Date());
         Product productAfterSave = this.saveProduct(product);
@@ -154,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
         // set price history
         PriceHistory priceHistory = new PriceHistory();
         priceHistory.setProduct(productAfterSave);
-        priceHistory.setStaff(staff);
+//        priceHistory.setStaff(staff);
         priceHistory.setApplyDate(new Date());
         priceHistory.setCreateDate(new Date());
         priceHistory.setPrice(body.getPrice());

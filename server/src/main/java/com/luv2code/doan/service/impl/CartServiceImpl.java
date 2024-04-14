@@ -26,31 +26,31 @@ public class CartServiceImpl implements CartService {
 
     public Cart addProductToCart(Product product, Customer user, Integer quantity) throws CartMoreThanProductInStock {
         Cart cartItem = cartRepository.findByUserIdAndProductId(user.getId(), product.getId());
-        if(cartItem != null) {
-            if((quantity + cartItem.getQuantity()) > product.getInStock()) {
-                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
-            }
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-        }
-        else {
-            if(quantity > product.getInStock()) {
-                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
-            }
-            cartItem = new Cart();
-            cartItem.setProduct(product);
-            cartItem.setCustomer(user);
-            cartItem.setQuantity(quantity);
-        }
-        cartRepository.save(cartItem);
+//        if(cartItem != null) {
+//            if((quantity + cartItem.getQuantity()) > product.getInStock()) {
+//                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
+//            }
+//            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+//        }
+//        else {
+//            if(quantity > product.getInStock()) {
+//                throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm " + product.getName() + "!");
+//            }
+//            cartItem = new Cart();
+//            cartItem.setProduct(product);
+//            cartItem.setCustomer(user);
+//            cartItem.setQuantity(quantity);
+//        }
+//        cartRepository.save(cartItem);
         return cartItem;
     }
 
     public Cart updateCart(Product product, Customer user, Integer quantity) throws CartMoreThanProductInStock {
         Cart cartItem = cartRepository.findByUserIdAndProductId(user.getId(), product.getId());
 
-        if(quantity > product.getInStock()) {
-            throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm này!");
-        }
+//        if(quantity > product.getInStock()) {
+//            throw new CartMoreThanProductInStock("Số lượng yêu cầu vượt quá số lượng còn lại của sản phẩm này!");
+//        }
         if(cartItem == null) {
             cartItem = new Cart();
             cartItem.setProduct(product);

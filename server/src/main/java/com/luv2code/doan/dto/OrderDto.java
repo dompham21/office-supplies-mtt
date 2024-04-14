@@ -33,9 +33,8 @@ public class OrderDto {
         this.phone = order.getPhone();
         this.address = order.getAddress();
         this.totalPrice = total;
-        if(order.getStaffApprove() != null && order.getStaffDelivery() != null) {
+        if(order.getStaffDelivery() != null) {
             this.staffDelivery = new UserDto(order.getStaffDelivery());
-            this.staffApprove = new UserDto(order.getStaffApprove());
         }
         this.customer = new UserDto(order.getCustomer());
     }
@@ -49,9 +48,8 @@ public class OrderDto {
         this.phone = order.getPhone();
         this.address = order.getAddress();
         this.totalPrice = total;
-        if(order.getStaffApprove() != null && order.getStaffDelivery() != null) {
+        if(order.getStaffDelivery() != null) {
             this.staffDelivery = new UserDto(order.getStaffDelivery());
-            this.staffApprove = new UserDto(order.getStaffApprove());
         }
         this.customer = new UserDto(order.getCustomer());
     }

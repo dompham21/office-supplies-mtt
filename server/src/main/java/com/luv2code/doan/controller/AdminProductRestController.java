@@ -40,9 +40,6 @@ public class AdminProductRestController {
     private ProductService productService;
 
     @Autowired
-    private BrandService brandService;
-
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired

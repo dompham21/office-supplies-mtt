@@ -23,6 +23,7 @@ import java.util.List;
 @Table(name = "product")
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private String id;
 
@@ -31,10 +32,6 @@ public class Product {
 
     @Column(name = "description", nullable = false)
     private String description;
-
-    @Column(name = "in_stock", nullable = false)
-    private Integer inStock;
-
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @Column(name="created_at", nullable = false)
@@ -48,8 +45,8 @@ public class Product {
     private Category categories;
 
     @ManyToOne
-    @JoinColumn(name = "supply_id")
-    private Supplier suppliers;
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<Review> reviews;
@@ -59,10 +56,4 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ImageProduct> imageProducts;
-
-
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brands;
-
 }

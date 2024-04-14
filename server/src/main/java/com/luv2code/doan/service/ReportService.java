@@ -86,5 +86,4 @@ public interface ReportService {
     public List<RevenueYearItem> getRevenueInYear(Integer year);
     public List<RevenueYearItem> getRevenueBetweenTwoDate(Date fromDate, Date toDate);
     public List<RevenueYearItem> getProfitBetweenTwoDate(Date fromDate, Date toDate);
-    public List<ReportItem> reportOrderCancel(Integer type);
 }

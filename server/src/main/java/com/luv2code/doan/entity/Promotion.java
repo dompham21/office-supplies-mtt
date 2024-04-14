@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Promotion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private String id;
 
@@ -37,8 +38,8 @@ public class Promotion {
     private String reason;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id")
-    private Staff staff;
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
     @OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PromotionDetail> promotionDetails = new ArrayList<>();

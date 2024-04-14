@@ -3,7 +3,7 @@ import EditIcons from "@components/icons/edit-icons";
 import EyeIcons from "@components/icons/eye-icons";
 import TrashIcons from "@components/icons/trash-icons";
 import Link from "next/link";
-import { StopOutlined, EyeOutlined,CheckCircleOutlined } from '@ant-design/icons';
+import { StopOutlined, EyeOutlined,CheckCircleOutlined, UnlockOutlined, LockOutlined } from '@ant-design/icons';
 import { Tooltip } from "antd";
 
 
@@ -17,7 +17,12 @@ const ActionButtons = ({
   deleteButton = false,
   viewButton = false,
   viewModal,
-  handleOpenModal
+  handleOpenModal,
+  seller = false,
+  handleUnlock,
+  handleLock,
+  approveSellerButton = false,
+  deleteSellerButton = false,
 }) => {
  
    
@@ -25,7 +30,7 @@ const ActionButtons = ({
     <div className="gap-3 inline-flex items-center w-auto">
         
         {deleteButton && (
-          <Tooltip placement="top" title={"Vô hiệu hoá"}>
+          <Tooltip placement="top" title={"Vô hiệu hoá tài khoản"}>
             <button
               onClick={(e) => handleDelete(e, id)}
               className="text-red-500 flex items-center justify-center transition text-xl duration-200 hover:text-red-600 focus:outline-none"
@@ -37,7 +42,7 @@ const ActionButtons = ({
            
         )}
         {approveButton && (
-          <Tooltip placement="top" title={"Kích hoạt lại"}>
+          <Tooltip placement="top" title={"Kích hoạt lại tài khoản"}>
 
             <button
                 onClick={(e) => handleApprove(e, id)}
@@ -63,6 +68,30 @@ const ActionButtons = ({
     
           )
         }
+       {seller && deleteSellerButton && (
+          <Tooltip placement="top" title={"Vô hiệu hoá bán hàng"}>
+            <button
+              onClick={(e) => handleLock(e, id)}
+              className="text-red-500 flex items-center justify-center transition text-xl duration-200 hover:text-red-600 focus:outline-none"
+              title={"Delete"}
+            >
+              <LockOutlined />
+            </button>
+          </Tooltip>
+           
+        )}
+        {seller && approveSellerButton && (
+          <Tooltip placement="top" title={"Kích hoạt lại bán hàng"}>
+
+            <button
+                onClick={(e) => handleUnlock(e, id)}
+                className=" text-[#009f7f] flex items-center justify-center transition text-xl duration-200  focus:outline-none"
+                title={"Approve"}
+            >
+              <UnlockOutlined />
+            </button>
+          </Tooltip>
+        )}
         {editUrl && (
           <Tooltip placement="top" title={"Chỉnh sửa"}>
             <Link

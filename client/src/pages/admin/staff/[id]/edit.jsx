@@ -1,8 +1,10 @@
 import AdminLayout from '@components/layouts/admin-layout';
+import CreateOrUpdateStaffForm from '@components/staff/create-or-update-staff-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loaders/loader';
 import CreateOrUpdateUserForm from '@components/user/create-or-update-user';
 import { useProductDetailQuery } from '@data/product/use-product-detail.query';
+import { useStaffDetailQuery } from '@data/staff/use-staff-detail.query';
 import { useUserDetailQuery } from '@data/user/admin/use-user-detail.query';
 import { useRouter } from 'next/router';
 import React from 'react'
@@ -15,7 +17,7 @@ export default function UpdateUserPage() {
     data,
     isLoading: loading,
     error,
-  } = useUserDetailQuery(query?.id);
+  } = useStaffDetailQuery(query?.id);
   if (loading) return <Loader text={"common:text-loading"} />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
@@ -25,7 +27,7 @@ export default function UpdateUserPage() {
           {"Edit user"}
         </h1>
       </div>
-      <CreateOrUpdateUserForm initialValues={data?.user} />
+      <CreateOrUpdateStaffForm initialValues={data?.user} />
     </>
   );
 }

@@ -1,9 +1,7 @@
 package com.luv2code.doan.service;
 
-import com.luv2code.doan.entity.Brand;
 import com.luv2code.doan.entity.Product;
 import com.luv2code.doan.entity.Promotion;
-import com.luv2code.doan.exceptions.BrandNotFoundException;
 import com.luv2code.doan.exceptions.PromotionNotFoundException;
 import org.springframework.data.domain.Page;
 

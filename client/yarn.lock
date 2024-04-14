@@ -2226,7 +2226,12 @@
   dependencies:
     "color-convert" "^2.0.1"
 
-"antd@^5.3.0", "antd@>=4.23.0 || >=5.0.0":
+"antd-input-otp@^2.1.0":
+  "integrity" "sha512-igyTfFALQXZFiuUxUPk91zkGwCXtbt6+Gynk6bZJsXPU9Dpgs9vK9SVKwAadjP08MZjks1RKnCgcyUR8dQj1tA=="
+  "resolved" "https://registry.npmjs.org/antd-input-otp/-/antd-input-otp-2.1.0.tgz"
+  "version" "2.1.0"
+
+"antd@^5.3.0", "antd@>=4.19.0", "antd@>=4.23.0 || >=5.0.0":
   "integrity" "sha512-h67gKgJRs07Qrf27AiKcJSEI3nCAmaCxxvEz6DSdRl1mHc03O8zAemRA6jPQQMPS5q4k7FxIphN+2ZnzdXlU2Q=="
   "resolved" "https://registry.npmjs.org/antd/-/antd-5.6.2.tgz"
   "version" "5.6.2"

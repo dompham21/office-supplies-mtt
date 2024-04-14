@@ -14,6 +14,7 @@ export const ROUTES = {
     ADMIN_PRODUCT: "/admin/product",
     ADMIN_CUSTOMER: "/admin/customer",
     ADMIN_STAFF: "/admin/staff",
+    ADMIN_SELLER: "/admin/seller",
     ADMIN_CATEGORY: "/admin/category",
     ADMIN_BRAND: "/admin/brand",
     ADMIN_ORDER: "/admin/order",
@@ -25,5 +26,11 @@ export const ROUTES = {
     ADMIN_SHIPPING: "/admin/shipping",
     ADMIN_SUPPLIER: "/admin/supplier",
     ADMIN_INVENTORY: "/admin/inventory",
+    SELLER_VERIFY: "/seller/verify",
+    SELLER_DASHBOARD: "/seller",
+    SELLER_LOGIN: "/seller/login",
+    VERIFY_FORGOT: "/forgot_password/verify",
+    CONFIRM_FORGOT: "/forgot_password/confirm",
+
   };
   

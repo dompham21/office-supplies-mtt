@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class PriceHistoryKey implements Serializable {
 
-    private String staff;
+    private String seller;
     private String product;
     private Date applyDate;
 }

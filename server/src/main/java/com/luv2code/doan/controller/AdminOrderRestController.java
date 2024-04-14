@@ -47,8 +47,6 @@ public class AdminOrderRestController {
     @Autowired
     private StaffService staffService;
 
-    @Autowired
-    private OrderReasonCancelService orderReasonCancelService;
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -135,15 +133,15 @@ public class AdminOrderRestController {
             List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
             for(OrderDetail orderDetail : listOrderDetail) {
-                Product product = orderDetail.getProduct();
-                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                        new ProductDto(product,
-                                promotionService.getCurrentPromotionByProduct(product),
-                                priceHistoryService.getPriceFromProductId(product.getId()),
-                                productService.getSoldQuantity(product.getId()),
-                                productService.getListImagesStringByProduct(product.getId()))
-                        );
-                listOrderDetailDto.add(orderDetailDto);
+//                Product product = orderDetail.getProduct();
+//                OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                        new ProductDto(product,
+//                                promotionService.getCurrentPromotionByProduct(product),
+//                                priceHistoryService.getPriceFromProductId(product.getId()),
+//                                productService.getSoldQuantity(product.getId()),
+//                                productService.getListImagesStringByProduct(product.getId()))
+//                        );
+//                listOrderDetailDto.add(orderDetailDto);
             }
             orderDto.setOrderDetails(listOrderDetailDto);
 
@@ -187,15 +185,15 @@ public class AdminOrderRestController {
         List<OrderDetail> listOrderDetail = order.getOrderDetails();
 
         for(OrderDetail orderDetail : listOrderDetail) {
-            Product product = orderDetail.getProduct();
-            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
-                    new ProductDto(product,
-                            promotionService.getCurrentPromotionByProduct(product),
-                            priceHistoryService.getPriceFromProductId(product.getId()),
-                            productService.getSoldQuantity(product.getId()),
-                            productService.getListImagesStringByProduct(product.getId()))
-                    );
-            listOrderDetailDto.add(orderDetailDto);
+//            Product product = orderDetail.getProduct();
+//            OrderDetailDto orderDetailDto = new OrderDetailDto(orderDetail,
+//                    new ProductDto(product,
+//                            promotionService.getCurrentPromotionByProduct(product),
+//                            priceHistoryService.getPriceFromProductId(product.getId()),
+//                            productService.getSoldQuantity(product.getId()),
+//                            productService.getListImagesStringByProduct(product.getId()))
+//                    );
+//            listOrderDetailDto.add(orderDetailDto);
         }
         orderDto.setOrderDetails(listOrderDetailDto);
 
@@ -209,12 +207,10 @@ public class AdminOrderRestController {
     public ResponseEntity<?> deliveryOrder(Authentication authentication, @PathVariable Integer id, @RequestBody @Valid ShipperRequest shipperRequest, HttpServletRequest request) throws OrderNotFoundException, NotFoundException, OrderStatusNotFoundException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        Staff staffApprove = staffService.getStaffByEmail(userPrincipal.getEmail());
         Staff staffDelivery = staffService.getStaffById(shipperRequest.getStaffDelivery());
         Order order = orderService.getOrderById(id);
         order.setStatus(orderStatusService.getOrderStatusById(3));
         order.setStaffDelivery(staffDelivery);
-        order.setStaffApprove(staffApprove);
 
         orderService.saveOrder(order);
 
@@ -222,21 +218,6 @@ public class AdminOrderRestController {
                 HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/cancel/{id}", method = RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<?> cancelOrder(@PathVariable Integer id, @RequestBody @Valid OrderCancelRequest orderCancelRequest, HttpServletRequest request) throws OrderNotFoundException, OrderStatusNotFoundException {
-
-        Order order = orderService.getOrderById(id);
-        OrderReasonCancel orderReasonCancel = orderReasonCancelService.getOrderReasonCancelById(orderCancelRequest.getReasonCancel());
-        orderService.cancelOrder(order, orderReasonCancel);
-
-        BaseResponse result = new BaseResponse(1, "Successfully!", request.getMethod(), new Date().getTime(),
-                HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-
 
     public static Date setToMidnight(Date date) {
         // Create a new Date object with the same date and time set to midnight (00:00)

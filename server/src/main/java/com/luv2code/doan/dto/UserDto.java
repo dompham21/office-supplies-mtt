@@ -1,6 +1,7 @@
 package com.luv2code.doan.dto;
 
 import com.luv2code.doan.entity.Customer;
+import com.luv2code.doan.entity.Seller;
 import com.luv2code.doan.entity.Staff;
 import lombok.*;
 
@@ -50,6 +51,16 @@ public class UserDto {
         this.isActive = staff.getAccount().getIsActive();
         this.avatar = staff.getAvatar();
         this.role = staff.getAccount().getRole().getName();
+    }
 
+    public UserDto(Seller seller) {
+        this.id = String.valueOf(seller.getId());
+        this.email = seller.getAccount().getEmail();
+        this.name = seller.getName();
+        this.phone = seller.getPhone();
+        this.registrationDate = seller.getRegistrationDate();
+        this.isActive = seller.getAccount().getIsActive();
+        this.avatar = seller.getAvatar();
+        this.role = seller.getAccount().getRole().getName();
     }
 }

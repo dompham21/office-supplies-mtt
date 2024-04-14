@@ -10,6 +10,7 @@ export const API_ENDPOINTS = {
     USERS: "users",
     CHECKOUT: "paypal/payment",
     REGISTER: "auth/signup",
+    REGISTER_SELLER: "auth/signup/seller",
     PRODUCTS: "product",
     PRODUCT_DETAIL: "product/detail",
     PRODUCTS_SEARCH: "product/search",
@@ -35,10 +36,15 @@ export const API_ENDPOINTS = {
     CUSTOMERS_ADMIN: "admin/customer",
     CUSTOMERS_DELETE: "admin/customer/delete",
     CUSTOMERS_APPROVE: "admin/customer/approve",
+    SELLERS_ADMIN: "admin/seller",
 
     STAFFS_ADMIN: "admin/staff",
     STAFFS_DELETE: "admin/staff/delete",
     STAFFS_APPROVE: "admin/staff/approve",
+    SELLERS_DELETE: "admin/seller/delete",
+    SELLERS_LOCK: "admin/seller/lock",
+    SELLERS_UNLOCK: "admin/seller/unlock",
+    SELLERS_APPROVE: "admin/seller/approve",
 
     USER_DELETE: "admin/user/delete",
     USER_APPROVE: "admin/user/approve",
@@ -81,6 +87,11 @@ export const API_ENDPOINTS = {
     SUPPLIERS_APPROVE: "admin/supplier/approve",
     SUPPLIERS_UPDATE_ADMIN: "admin/supplier/update",
     SUPPLIERS_ADD_ADMIN: "admin/supplier/add",
+    STAFF_ADD_ADMIN: "admin/staff/add",
+    STAFF_UPDATE_ADMIN: "admin/staff/update",
+    STAFF_ADMIN: "admin/staff",
+
+
     SUPPLIERS_PRODUCT_ADMIN: "admin/supplier/product",
     SUPPLIERS: "supplier",
 
@@ -136,6 +147,15 @@ export const API_ENDPOINTS = {
     LOGIN: "auth/login",
     LOGIN_ADMIN: "auth/login/staff",
     LOGIN_SHIPPER: "auth/login/shipper",
+    LOGIN_SELLER: "auth/login/seller",
+    VERIFY_SELLER: "auth/signup/verify",
+    RESEND_SELLER: "auth/seller/resend",
+    RESEND_FORGOT: "auth/forgot/resend",
+    VERIFY_FORGOT: "auth/forgot/verify",
+    FORGOT_PASSWORD_CONFIRM: "auth/forgot/confirm",
+
+    FORGOT_PASSWORD: "auth/forgot/password",
+
     CHANGE_PASSWORD: "profile/password",
     FORGET_PASSWORD: "forget-password",
     VERIFY_FORGET_PASSWORD_TOKEN: "verify-forget-password-token",

@@ -37,8 +37,6 @@ public class ProductDto {
 
     private CategoryDto category;
 
-    private BrandDto brand;
-
     private Float rate;
 
     private Integer discount;
@@ -50,8 +48,6 @@ public class ProductDto {
         this.registrationDate = product.getRegistrationDate();
         this.isActive = product.getIsActive();
         this.category = new CategoryDto(product.getCategories());
-        this.brand = new BrandDto(product.getBrands());
-        this.inStock = product.getInStock();
         this.price = price;
         this.soldQuantity = soldQuantity;
 
