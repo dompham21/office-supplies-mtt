@@ -47,9 +47,14 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query("SELECT p FROM Product p WHERE (p.name LIKE %:keyword% OR p.categories.name LIKE %:keyword%)")
     public Page<Product> getListProductsAdminWithKeyword(String keyword, Pageable pageable);
 
+    @Query("SELECT p FROM Product p WHERE (p.name LIKE %:keyword% OR p.categories.name LIKE %:keyword%) AND p.seller.id = :sellerId")
+    public Page<Product> getListProductsSellerWithKeyword(String keyword, Integer sellerId, Pageable pageable);
+
     @Query("SELECT p FROM Product p")
     public Page<Product> getListProductsAdmin(Pageable pageable);
 
+    @Query("SELECT p FROM Product p WHERE p.seller.id = : sellerId")
+    public Page<Product> getListProductsSeller(Integer sellerId, Pageable pageable);
 
     @Query(value = "SELECT [dbo].[FUNC_LAY_GIA_SAN_PHAM_CAO_NHAT]() as price", nativeQuery = true)
     public float getMaxPrice();

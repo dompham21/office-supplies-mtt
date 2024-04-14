@@ -12,6 +12,9 @@ export const ROUTES = {
     SHIPPER_DASHBOARD: "/admin/shipper",
 
     ADMIN_PRODUCT: "/admin/product",
+    SELLER_PRODUCT: "/seller/product",
+    SELLER_ORDER: "/seller/order",
+
     ADMIN_CUSTOMER: "/admin/customer",
     ADMIN_STAFF: "/admin/staff",
     ADMIN_SELLER: "/admin/seller",

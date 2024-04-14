@@ -78,7 +78,7 @@ function LoginFormSeller() {
                             progress: undefined,
                             theme: "light",
                         });
-                        router.push(ROUTES.SHIPPER_DASHBOARD);
+                        router.push(ROUTES.SELLER_DASHBOARD);
                     }
                     else if(result == 0) {
                         setErrorMsg(msg);

@@ -17,22 +17,18 @@ import { ShippingsIcon } from "@components/icons/shipping-icons";
 import { TaxesIcon } from "@components/icons/taxs-icons";
 import { AttributeIcon } from "@components/icons/attribute-icons";
 import { OrdersStatusIcon } from "@components/icons/order-status-icons";
+import NavbarSeller from "./navbar-seller";
 
 const SellerLayout = ({ children }) => {
     const router = useRouter()
     const sidebarLinks = [
         {
-            href: ROUTES.ADMIN_CUSTOMER,
-            label: "Khách hàng",
-            icon:  <UserIcons/>
+            href: ROUTES.SELLER_PRODUCT,
+            label: "Sản phẩm",
+            icon:  <ProductIcons/>
         },
         {
-            href: ROUTES.ADMIN_STAFF,
-            label: "Seller",
-            icon:  <BrandIcons/>
-        },
-        {
-            href: ROUTES.ADMIN_ORDER,
+            href: ROUTES.SELLER_ORDER,
             label: "Đơn đặt hàng",
             icon:  <OrderIcons/>
         }
@@ -48,15 +44,15 @@ const SellerLayout = ({ children }) => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col transition-colors duration-150">
-        <Navbar />
+        <NavbarSeller />
 
 
         <div className="flex flex-1 pt-20">
             <aside className="shadow w-72 xl:w-76 hidden lg:block overflow-y-auto bg-white px-4 fixed start-0 bottom-0 h-full pt-22">
             <div className="flex flex-col space-y-6 py-3">
                 <Link
-                    href={ROUTES.ADMIN_DASHBOARD}
-                    className={`flex w-full items-center text-lg text-start hover:text-accent focus:text-accent  ${router.pathname == ROUTES.ADMIN_DASHBOARD ? 'text-accent' : ''}`}
+                    href={ROUTES.SELLER_DASHBOARD}
+                    className={`flex w-full items-center text-lg text-start hover:text-accent focus:text-accent  ${router.pathname == ROUTES.SELLER_DASHBOARD ? 'text-accent' : ''}`}
                 >
                     <DashboardIcons/>
                     <span>Dashboard</span>

@@ -15,9 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductRequest {
-    @NotBlank(message = "Id must not be blank")
-    @Size(max = 10, message = "Name should be less than 10 characters")
-    private String id;
 
     @NotBlank(message = "Name must not be blank")
     @Size(max = 50, message = "Name should be less than 50 characters")

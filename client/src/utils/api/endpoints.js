@@ -28,6 +28,8 @@ export const API_ENDPOINTS = {
     PRODUCT_DELETE: "admin/product/delete",
     PRODUCT_APPROVE: "admin/product/approve",
     PRODUCTS_ADMIN: "admin/product",
+    PRODUCTS_SELLER: "seller/product",
+
     PRODUCT_ADD_ADMIN: "admin/product/add",
     PRODUCT_UPDATE_ADMIN: "admin/product/update",
     ROLES: "admin/role",
@@ -135,6 +137,8 @@ export const API_ENDPOINTS = {
     ADDRESS_DELETE: "address/delete",
     ME: "profile",
     ME_ADMIN: "admin/profile",
+    ME_SELLER: "seller/profile",
+
     PROFILE_AVATAR: "profile/avatar",
     PROFILE_NAME: "profile/change",
     ADD_CARTS: "cart/add",

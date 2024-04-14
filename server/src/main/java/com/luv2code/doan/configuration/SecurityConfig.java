@@ -91,6 +91,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                         "/api/otp/validateOTP",
                         "/api/profile/**").hasAnyAuthority("ROLE_USER")
                 .antMatchers("/api/shipper/**").hasAnyAuthority("ROLE_SHIPPER")
+                .antMatchers("/api/seller/**").hasAnyAuthority("ROLE_SELLER")
                 .antMatchers("/api/admin/profile/**", "/api/admin/invoice/get/**").hasAnyAuthority("ROLE_SHIPPER", "ROLE_ADMIN")
                 .antMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated();
