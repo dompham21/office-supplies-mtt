@@ -61,31 +61,22 @@ const AdminLayout = ({ children }) => {
             label: "Phiếu nhập",
             icon:  <ImportProductIcons/>
         },
-        // {
-        //     href: ROUTES.ADMIN_EXPORT,
-        //     label: "Export",
-        //     icon:  <OrdersStatusIcon/>
-        // },
+        {
+            href: ROUTES.ADMIN_PURCHASE,
+            label: "Phiếu đặt",
+            icon:  <ImportProductIcons/>
+        },
+        
         {
             href: ROUTES.ADMIN_PROMOTION,
             label: "Đợt khuyến mãi",
             icon:  <CouponIcons/>
         },
-        // {
-        //     href: ROUTES.ADMIN_SHIPPING,
-        //     label: "Shipping",
-        //     icon:  <ShippingsIcon/>
-        // },
-        // {
-        //     href: ROUTES.ADMIN_SUPPLIER,
-        //     label: "Supplier",
-        //     icon:  <TaxesIcon/>
-        // },
-        // {
-        //     href: ROUTES.ADMIN_INVENTORY,
-        //     label: "Inventory",
-        //     icon:  <AttributeIcon/>
-        // },
+        {
+            href: ROUTES.ADMIN_SUPPLIER,
+            label: "Nhà cung cấp",
+            icon:  <TaxesIcon/>
+        }
     ]
 
     const SidebarItemMap = () => (

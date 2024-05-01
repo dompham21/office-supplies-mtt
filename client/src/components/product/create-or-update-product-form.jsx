@@ -21,6 +21,7 @@ import { useQueryClient } from "react-query";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
 import Alert from "@components/ui/alert";
 import { toast } from "react-toastify";
+import SupplierSelectInput from "@components/supplier/supplier-select-input";
 
 const productValidationSchema = yup.object().shape({
   id: yup.string().required("Vui lòng nhập mã sản phẩm"),
@@ -31,11 +32,6 @@ const productValidationSchema = yup.object().shape({
       .typeError("Giá phải là số")
       .min(0, "Giá phải lớn hơn hoặc bằng 0")
       .required("Vui lòng nhập giá"),
-  inStock: yup
-      .number()
-      .typeError("Số lượng tồn phải là số")
-      .positive("Số lượng tồn phỉa lớn hơn hoặc bằng 0")
-      .required("Vui lòng nhập số lượng tồn"),
   active: yup
       .boolean()
       .required("Vui lòng chọn trạng thái sản phẩm"),
@@ -43,6 +39,9 @@ const productValidationSchema = yup.object().shape({
   category: yup
     .object()
     .required("Vui lòng chọn danh mục sản phẩm"),
+  supplier: yup
+    .object()
+    .required("Vui lòng chọn nhà cung cấp"),
   brand: yup
     .object()
     .required("Vui lòng chọn thương hiệu sản phẩm")
@@ -57,6 +56,7 @@ const defaultValues = {
   images: null,
   category: null,
   brand: null,
+  supplier: null,
   inStock: 0
 
 };
@@ -105,7 +105,7 @@ export default function CreateOrUpdateProductForm({ initialValues }) {
       images: values.images,
       categoryId: values?.category?.id,
       brandId: values?.brand?.id,
-      inStock: values?.inStock
+      supplierId: values?.supplier?.id
     };
 
     if(initialValues) { // updating
@@ -334,13 +334,17 @@ export default function CreateOrUpdateProductForm({ initialValues }) {
                 control={control}
                 error={(errors?.brand)?.message}
               />
+              <SupplierSelectInput
+                control={control}
+                error={(errors?.supplier)?.message}
+              />
               <div>
                 <label className="block text-body-dark font-semibold text-sm leading-none mb-3">Giá sản phẩm*</label>
                 <InputNumberOnly format={true} name="price" control={control} error={(errors?.price)?.message}/>
               </div>
-              <div>
+              <div className={`${initialValues ? 'block' : 'hidden'}`}>
                 <label className="block text-body-dark font-semibold text-sm leading-none mb-3">Số lượng tồn</label>
-                <InputNumberOnly format={true} name="inStock" control={control} error={(errors?.inStock)?.message}/>
+                <InputNumberOnly readOnly={initialValues} format={true} name="inStock" control={control} error={(errors?.inStock)?.message}/>
               </div>
               <div>
                 <label className="block text-body-dark font-semibold text-sm leading-none mb-3">Trạng thái*</label>

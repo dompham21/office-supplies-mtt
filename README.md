@@ -7,7 +7,9 @@
 
 ## Description
 This is a website for managing office supplies shops and facilitating online sales. Technical: ReactJS, Next.js, Spring Boot, Microsoft SQL Server, Ant Design, Tailwind CSS, React-Query.
-
+ docker-compose build --no-cache              
+ docker-compose up -d
+docker exec -it 6d241e8b139b /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 147258369Dom -i /docker-entrypoint-initdb.d/init-data.sql
 
 ### A typical top-level directory layout
 

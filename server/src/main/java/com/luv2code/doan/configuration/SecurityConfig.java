@@ -45,6 +45,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        System.out.print(bCryptPasswordEncoder.encode("123456789"));
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
@@ -62,6 +63,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                         "/api/brand/**",
                         "/api/product/**",
                         "/api/poster/**",
+                        "/api/supplier/**",
                         "/api/image/**",
                         "/api/test/**",
                         "/api/review/get/**",

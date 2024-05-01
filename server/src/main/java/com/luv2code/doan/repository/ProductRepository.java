@@ -76,7 +76,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query(value = "SELECT [dbo].[FUNC_LAY_SL_BAN_SAN_PHAM](:productId) as sl", nativeQuery = true)
     public int getSoldQuantity(String productId);
 
-    @Query(value = "SELECT * FROM dbo.product WHERE created_at >= DATEADD(DAY, -30, GETDATE()) AND is_active = 1 ORDER BY created_at DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM dbo.product WHERE is_active = 1 ORDER BY created_at DESC", nativeQuery = true)
     public List<Product> getProductNew();
 
     public Product getProductById(String id);

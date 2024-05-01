@@ -1,6 +1,7 @@
 package com.luv2code.doan.service;
 
 import com.luv2code.doan.bean.*;
+import com.luv2code.doan.entity.Order;
 import com.luv2code.doan.entity.OrderStatus;
 import com.luv2code.doan.exceptions.OrderStatusNotFoundException;
 import com.luv2code.doan.repository.OrderStatusRepository;
@@ -49,6 +50,17 @@ public interface ReportService {
 
     public long countOrderByYearAndStatusId(Integer statusId) throws OrderStatusNotFoundException;
 
+    public long countOrderByWeek();
+
+    public long countOrderByMonth();
+
+    public long countOrderByYear();
+
+
+    public long countOrderCancelByWeekAndReason(int reason);
+    public long countOrderCancelByMonthAndReason(int reason);
+    public long countOrderCancelByYearAndReason(int reason);
+
     public List<ReportItem> getOverviewUserByWeek();
 
     public List<ReportItem> getOverviewUserByMonth();
@@ -73,4 +85,6 @@ public interface ReportService {
     public List<RevenueItem> getRevenueOfNDay(Integer n);
     public List<RevenueYearItem> getRevenueInYear(Integer year);
     public List<RevenueYearItem> getRevenueBetweenTwoDate(Date fromDate, Date toDate);
+    public List<RevenueYearItem> getProfitBetweenTwoDate(Date fromDate, Date toDate);
+    public List<ReportItem> reportOrderCancel(Integer type);
 }

@@ -1,6 +1,7 @@
 package com.luv2code.doan.service;
 
 import com.luv2code.doan.entity.Supplier;
+import com.luv2code.doan.exceptions.DuplicateException;
 import com.luv2code.doan.exceptions.SupplierNotFoundException;
 import org.springframework.data.domain.Page;
 
@@ -20,4 +21,6 @@ public interface SupplierService {
     public void approveSupplier (String id) throws SupplierNotFoundException;
 
     public void deleteSupplier (String id) throws SupplierNotFoundException;
+
+    public void checkDupplicateIdSupplier(String id) throws DuplicateException;
 }

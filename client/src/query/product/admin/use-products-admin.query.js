@@ -39,7 +39,7 @@ const useProductsQuery = ( params ) => {
         {   
             retry: false,
             keepPreviousData: true,
-            refetchOnWindowFocus: false
+            refetchOnWindowFocus: false,
 
         }
     );

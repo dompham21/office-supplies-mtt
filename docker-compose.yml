@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - 1433:1433
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${MSSQL_SA_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+    networks:
+      - backend-network
+  spring-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      - sqlserver
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=office_supplies;createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+
+  nextjs-app:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend-network
+    depends_on:
+      - spring-app
+
+volumes:
+  sqlserver_data:
+
+networks:
+  frontend-network:
+  backend-network:
+    driver: bridge
