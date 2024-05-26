@@ -189,8 +189,8 @@ function ProfileUpdateInfoForm({initialValues, loading}) {
     const queryClient = useQueryClient();
 
     const { data: provinceDetail } = useProvincesDetailQuery(province);
-    const { data: districtDetail } = useDistrictsDetailQuery(district);
-    const { data: wardDetail } = useWardsDetailQuery(ward);
+    const { data: districtDetail } = useDistrictsDetailQuery(province, district);
+    const { data: wardDetail } = useWardsDetailQuery(district, ward);
 
 
   

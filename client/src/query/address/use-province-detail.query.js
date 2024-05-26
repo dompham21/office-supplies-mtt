@@ -4,10 +4,10 @@ import { getAuthorization, getExternalAxios } from "@utils/api/AxiosService";
 
 const fetchAddresses = async (id) => {
 
-  const  response  =  await getExternalAxios(`${API_ENDPOINTS.PROVINCE}/${id}`, {"depth": 1});
+  const  response  =  await getExternalAxios(`${API_ENDPOINTS.PROVINCE}`);
   const { data } = response
   return {
-    provinces: data
+    provinces: data.results.filter(province => province.province_id == id)
   };
 };
 

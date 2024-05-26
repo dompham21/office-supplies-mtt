@@ -13,7 +13,7 @@ const AxiosService = axios.create({
 }); 
 
 export const ProvinceAxiosService = axios.create({
-  baseURL: "https://provinces.open-api.vn/api", // TODO: take this api URL from env
+  baseURL: "https://vapi.vnappmob.com/api", // TODO: take this api URL from env
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

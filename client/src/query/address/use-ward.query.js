@@ -3,10 +3,10 @@ import { API_ENDPOINTS } from "@utils/api/endpoints";
 import { getAuthorization, getExternalAxios } from "@utils/api/AxiosService";
 
 const fetchAddresses = async (id) => {
-  const  response  = await getExternalAxios(`${API_ENDPOINTS.DISTRICT}/${id}`, { "depth": 2});
+  const  response  = await getExternalAxios(`${API_ENDPOINTS.PROVINCE}/ward/${id}`);
   const { data } = response
   return {
-    wards: data.wards
+    wards: data?.results
   };
 };
 

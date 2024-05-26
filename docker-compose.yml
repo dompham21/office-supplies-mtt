@@ -7,9 +7,9 @@ services:
       SA_PASSWORD: ${MSSQL_SA_PASSWORD}
       ACCEPT_EULA: Y
       MSSQL_PID: Express
-      MSSQL_TCP_PORT: 1433
+      MSSQL_TCP_PORT: 1434
     ports:
-      - 1433:1433
+      - 1434:1433
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
@@ -20,8 +20,6 @@ services:
       retries: 10
       start_period: 10s
       timeout: 3s
-    networks:
-      - backend-network
   spring-app:
     build:
       context: ./server
@@ -31,10 +29,8 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    networks:
-      - backend-network
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=office_supplies;createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1434;databaseName=office_supplies;createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 
@@ -44,15 +40,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    networks:
-      - frontend-network
     depends_on:
       - spring-app
 
 volumes:
   sqlserver_data:
-
-networks:
-  frontend-network:
-  backend-network:
-    driver: bridge

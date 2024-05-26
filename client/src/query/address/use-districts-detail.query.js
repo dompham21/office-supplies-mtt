@@ -2,19 +2,19 @@ import { useQuery } from "react-query";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
 import { getAuthorization, getExternalAxios } from "@utils/api/AxiosService";
 
-const fetchAddresses = async (id) => {
+const fetchAddresses = async (province, id) => {
 
-  const  response  =  await getExternalAxios(`${API_ENDPOINTS.DISTRICT}/${id}`, {"depth": 1});
+  const  response  =  await getExternalAxios(`${API_ENDPOINTS.PROVINCE}/district/${province}`);
   const { data } = response
   return {
-    districts: data
+    districts: data.results.filter(district => district.district_id == id)
   };
 };
 
-const useDistrictsDetailQuery = (id) => {
+const useDistrictsDetailQuery = (province, id) => {
   return useQuery(
-    [API_ENDPOINTS.DISTRICT, id, "1"],
-    () => fetchAddresses(id),
+    [API_ENDPOINTS.DISTRICT, province, id, "1"],
+    () => fetchAddresses(province, id),
     { 
       retry: false,       
       refetchOnWindowFocus: false,

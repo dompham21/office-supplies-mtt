@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="370c3025-eba8-4d24-a9e0-309e45d03589" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +33,7 @@
       <option name="presentableId" value="Default" />
       <updated>1710851871171</updated>
       <workItem from="1710851872512" duration="6000" />
+      <workItem from="1716727401511" duration="4000" />
     </task>
     <servers />
   </component>

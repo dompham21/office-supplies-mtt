@@ -19,7 +19,7 @@ export const API_ENDPOINTS = {
     PRODUCTS_PROMOTION: "product/promotion",
     PAYPAL_EXECUTE: "paypal/payment/execute",
 
-    PROVINCE: "/p",
+    PROVINCE: "/province",
     DISTRICT: "/d",
     WARD: "/w",
 

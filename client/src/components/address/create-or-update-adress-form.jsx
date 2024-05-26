@@ -54,8 +54,8 @@ function SelectProvinces({
           handleOnChange={onChange}
           placeholder="Tỉnh/Thành phố"
           control={control}
-          getOptionLabel={(option) => option.name}
-          getOptionValue={(option) => option.code}
+          getOptionLabel={(option) => option.province_name}
+          getOptionValue={(option) => option.province_id}
           options={data?.provinces}
           isLoading={loading}
         />
@@ -81,8 +81,8 @@ function SelectDistricts({
           handleOnChange={onChange}
           placeholder="Quận/Huyện"
           control={control}
-          getOptionLabel={(option) => option.name}
-          getOptionValue={(option) => option.code}
+          getOptionLabel={(option) => option.district_name}
+          getOptionValue={(option) => option.district_id}
           options={data?.districts}
           isLoading={loading}
         />
@@ -109,8 +109,8 @@ function SelectWards({
           handleOnChange={onChange}
           placeholder="Phường/Xã"
           control={control}
-          getOptionLabel={(option) => option.name}
-          getOptionValue={(option) => option.code}
+          getOptionLabel={(option) => option.ward_name}
+          getOptionValue={(option) => option.ward_id}
           options={data?.wards}
           isLoading={loading}
         />

@@ -93,7 +93,7 @@ function SelectProvinces({
             className='w-full'
             >
             {data?.provinces.map(item => (
-              <Option key={item.code} value={item.code} label={item.name}>
+              <Option key={item.code} value={item.province_id} label={item.province_name}>
                 <div>
                   {item.name}
                 </div>
@@ -132,7 +132,7 @@ return (
             className='w-full'
             >
             {data?.districts.map(item => (
-              <Option key={item.code} value={item.code} label={item.name}>
+              <Option key={item.code} value={item.district_id} label={item.district_name}>
                 <div>
                   {item.name}
                 </div>
@@ -172,7 +172,7 @@ return (
             className='w-full'
             >
             {data?.wards.map(item => (
-              <Option key={item.code} value={item.code} label={item.name}>
+              <Option key={item.code} value={item.ward_id} label={item.ward_name}>
                 <div>
                   {item.name}
                 </div>
@@ -197,8 +197,8 @@ export default function Checkout() {
   const [ward, setWard] = useState( null);
 
   const { data: provinceDetail } = useProvincesDetailQuery(province);
-  const { data: districtDetail } = useDistrictsDetailQuery(district);
-  const { data: wardDetail } = useWardsDetailQuery(ward);
+  const { data: districtDetail } = useDistrictsDetailQuery(province, district);
+  const { data: wardDetail } = useWardsDetailQuery(district, ward);
 
   const queryClient = useQueryClient();
   const [api, contextHolder] = notification.useNotification();

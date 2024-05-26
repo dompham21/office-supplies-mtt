@@ -2,18 +2,18 @@ import { useQuery } from "react-query";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
 import { getAuthorization, getExternalAxios } from "@utils/api/AxiosService";
 
-const fetchAddresses = async (id) => {
-  const  response  = await getExternalAxios(`${API_ENDPOINTS.WARD}/${id}`, {"depth": 1});
+const fetchAddresses = async (ward, id) => {
+  const  response  = await getExternalAxios(`${API_ENDPOINTS.PROVINCE}/ward/${id}`);
   const { data } = response
   return {
-    wards: data
+    wards: data.results.filter(ward => ward.ward_id == id)
   };
 };
 
-const useWardsDetailQuery = (id) => {
+const useWardsDetailQuery = (ward, id) => {
   return useQuery(
-    [API_ENDPOINTS.WARD, id, "1"],
-    () => fetchAddresses(id),
+    [API_ENDPOINTS.WARD, ward, id, "1"],
+    () => fetchAddresses(ward, id),
     { 
       retry: false,       
       refetchOnWindowFocus: false,

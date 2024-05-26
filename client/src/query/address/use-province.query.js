@@ -7,7 +7,7 @@ const fetchAddresses = async () => {
   const  response  = await getExternalAxios(API_ENDPOINTS.PROVINCE);
   const { data } = response
   return {
-    provinces: data
+    provinces: data?.results
   };
 };
 
